@@ -16,7 +16,7 @@ import {
 
 export default class SignUpScreen extends React.Component {
   static navigationOptions = {
-    title: "Log In"
+    title: "SignUp"
     //header: null //pour enlever le header
   };
 
@@ -30,7 +30,7 @@ export default class SignUpScreen extends React.Component {
     const { navigate } = this.props.navigation;
 
     axios
-      .post("http://localhost:3000/log_in", {
+      .post("http://localhost:3000/sign_up", {
         email: this.state.email,
         password: this.state.password
       })
@@ -38,12 +38,12 @@ export default class SignUpScreen extends React.Component {
         console.log("response****", response.data);
 
         if (response) {
-          navigate("Annonces", { name: "Home" });
+          navigate("StartingProfile", { name: "Votre profil de testeur" });
         }
       })
       .catch(err => {
         console.log("erreur", err);
-        alert("Mauvais identifiant ou mauvais mot de passe");
+        alert("Email déjà utilisé. Veuillez donner un email valable.");
       });
   };
 
@@ -113,7 +113,7 @@ export default class SignUpScreen extends React.Component {
           }}
           onPress={this.handleSubmit}
         >
-          <Text>SE CONNECTER</Text>
+          <Text>CRÉER MON COMPTE</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     );

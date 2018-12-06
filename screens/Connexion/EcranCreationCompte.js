@@ -21,9 +21,8 @@ export default class SignUpScreen extends React.Component {
   };
 
   state = {
-    email: "",
-    password: "",
-    isAuthenticated: false
+    email: "jo@msn.com",
+    password: "jo"
   };
 
   handleSubmit = () => {
@@ -38,7 +37,7 @@ export default class SignUpScreen extends React.Component {
         console.log("response****", response.data);
 
         if (response) {
-          navigate("StartingProfile", { name: "Votre profil de testeur" });
+          navigate("StartingProfile", response.data);
         }
       })
       .catch(err => {

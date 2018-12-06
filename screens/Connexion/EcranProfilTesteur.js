@@ -11,6 +11,7 @@ import {
   TextInput
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import DateTimePickerTester from "../../components/DateTimePickerTester";
 
 // pierre@msn.com
 //  pierre
@@ -18,6 +19,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 export default class StatingProfileScreen extends React.Component {
   static navigationOptions = {
     title: "Profil testeur"
+
     //header: null //pour enlever le header
   };
 
@@ -27,18 +29,22 @@ export default class StatingProfileScreen extends React.Component {
     isAuthenticated: false
   };
 
+  componentDidMount() {
+    this.setState({ ...this.props.navigation.state.params });
+  }
+
   handleSubmit = () => {
     const { navigate } = this.props.navigation;
 
     axios
-      .post("http://localhost:3000/log_in", {
+      .post("http://localhost:3000/user/update", {
         firstName: this.state.firstName,
         lastName: this.state.lastName,
         sex: this.state.sex,
         age: this.state.age
       })
       .then(response => {
-        console.log("response****", response.data);
+        //console.log("response****", response.data);
 
         if (response) {
           navigate("Home", { name: "Home" });
@@ -51,15 +57,17 @@ export default class StatingProfileScreen extends React.Component {
   };
 
   render() {
+    console.log("mystates", this.state);
+
     return (
-      <View style={{ marginLeft: 20, marginRight: 20, flex: 1 }}>
+      <View style={{ marginLeft: 20, marginRight: 20, marginTop: 30, flex: 1 }}>
         <Text>Prénom</Text>
         <TextInput
           style={{
             fontSize: 20,
             color: "black",
             height: 35,
-
+            backgroundColor: "white",
             marginTop: 10,
             borderWidth: 1,
             borderColor: "rgb(103,114,129)",
@@ -74,9 +82,9 @@ export default class StatingProfileScreen extends React.Component {
         <TextInput
           style={{
             fontSize: 20,
+            backgroundColor: "white",
             color: "black",
             height: 35,
-
             marginTop: 10,
             borderWidth: 1,
             borderColor: "rgb(103,114,129)",
@@ -105,9 +113,7 @@ export default class StatingProfileScreen extends React.Component {
               justifyContent: "center",
               alignItems: "center"
             }}
-            name="sex"
-            value="homme"
-            onPress={sex => this.setState({ sex })}
+            onPress={() => this.setState({ sex: "homme" })}
           >
             <Text
               style={{
@@ -130,7 +136,7 @@ export default class StatingProfileScreen extends React.Component {
             }}
             name="sex"
             value="femme"
-            onPress={sex => this.setState({ sex })}
+            onPress={() => this.setState({ sex: "Femme" })}
           >
             <Text
               style={{
@@ -143,33 +149,42 @@ export default class StatingProfileScreen extends React.Component {
           </TouchableOpacity>
         </View>
         <Text style={{ marginTop: 20 }}>Date de naissance</Text>
-        <TextInput
+
+        <View
           style={{
-            fontSize: 20,
-            color: "black",
             height: 35,
+            backgroundColor: "white",
             marginTop: 10,
             borderWidth: 1,
             borderColor: "rgb(103,114,129)",
-            paddingBottom: 5
-          }}
-          type="text"
-          name="age"
-          value={this.state.age}
-          onChangeText={age => this.setState({ age })}
-        />
-        <TouchableOpacity
-          style={{
-            height: 40,
-            width: 50,
-
-            borderRadius: 50,
-            backgroundColor: "pink",
+            paddingBottom: 5,
             justifyContent: "center",
             alignItems: "center"
           }}
-        />
-        <Icon name="rocket" size={30} color="#900" />
+        >
+          <DateTimePickerTester
+            changeDate={date => {
+              const today = new Date();
+              this.setState({ age: today.getYear() - date.getYear() });
+            }}
+          />
+        </View>
+
+        <TouchableOpacity
+          style={{
+            height: 60,
+            width: 60,
+            marginLeft: 200,
+            marginTop: 100,
+            borderRadius: 60,
+            backgroundColor: "rgb(171,36,100)",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+          onPress={this.handleSubmit}
+        >
+          <Icon name="pencil" size={30} color="white" />
+        </TouchableOpacity>
       </View>
     );
   }

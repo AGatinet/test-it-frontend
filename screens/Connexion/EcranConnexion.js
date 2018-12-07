@@ -14,15 +14,15 @@ import {
 // pierre@msn.com
 //  pierre
 
-export default class SignUpScreen extends React.Component {
+export default class LogIn extends React.Component {
   static navigationOptions = {
     title: "Log In"
     //header: null //pour enlever le header
   };
 
   state = {
-    email: "",
-    password: "",
+    email: "Jj@msn.com",
+    password: "jj",
     isAuthenticated: false
   };
 

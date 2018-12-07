@@ -1,10 +1,11 @@
-import React from "react";
 import { createSwitchNavigator } from "react-navigation";
 
 import MainTabNavigator from "./MainTabNavigator";
 import AuthStack from "./AuthStack";
+import AnnoncesDetails from "../screens/Annonces/AnnoncesDetails";
 
 export default createSwitchNavigator({
-  Main: MainTabNavigator,
-  Auth: AuthStack
+	Main: MainTabNavigator,
+	AnnoncesDetails: AnnoncesDetails,
+	Auth: AuthStack
 });

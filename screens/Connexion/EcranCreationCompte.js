@@ -16,7 +16,10 @@ import {
 
 export default class SignUpScreen extends React.Component {
   static navigationOptions = {
-    title: "SignUp"
+    title: "Inscription",
+    headerStyle: {
+      backgroundColor: "rgb(239,239,244)"
+    }
     //header: null //pour enlever le header
   };
 
@@ -34,10 +37,9 @@ export default class SignUpScreen extends React.Component {
         password: this.state.password
       })
       .then(response => {
-        console.log("response**** :");
-
         if (response) {
           navigate("StartingProfile", { _id: response.data._id });
+          //J'envoie l'Id sur l'écran startingProfile
         }
       })
       .catch(err => {
@@ -59,9 +61,16 @@ export default class SignUpScreen extends React.Component {
           justifyContent: "center"
         }}
       >
-        <Text style={{ fontSize: 30, color: "black", alignSelf: "center" }}>
-          Logo Test iT
-        </Text>
+        <Image
+          style={{
+            height: 160,
+            width: 160,
+            alignSelf: "center",
+            marginTop: 30,
+            marginRight: 30
+          }}
+          source={require("../../assets/images/testit-logo.png")}
+        />
         <TextInput
           style={{
             fontSize: 20,

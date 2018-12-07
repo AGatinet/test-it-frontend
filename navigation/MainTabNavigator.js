@@ -13,21 +13,54 @@ import MesOffresScreen from "../screens/Mesoffres/MesOffres";
 import ReglagesScreen from "../screens/Reglages/Reglages";
 
 const Annonces = createStackNavigator({
-	Annonces: AnnoncesScreen
+  Annonces: {
+    screen: AnnoncesScreen,
+    navigationOptions: {
+      headerStyle: {
+        backgroundColor: "#041A39"
+      },
+      title: "Annonces",
+      headerTitleStyle: {
+        color: "white",
+        fontSize: 22
+      }
+    }
+  }
 });
 
 Annonces.navigationOptions = {
-	tabBarLabel: "Annonces",
-	tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name={"home"} />
+  tabBarLabel: "Annonces",
+  tabBarOptions: {
+    activeTintColor: "#041A39",
+    inactiveTintColor: "#ACB9CC"
+  },
+  tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name={"home"} />
 };
 
 const Profil = createStackNavigator({
-	Profil: ProfilScreen
+  Profil: {
+    screen: ProfilScreen,
+    navigationOptions: {
+      headerStyle: {
+        backgroundColor: "#041A39"
+      },
+      title: "Mon profil",
+      headerTitleStyle: {
+        color: "white",
+        fontSize: 22
+      }
+    }
+  }
 });
 
 Profil.navigationOptions = {
-	tabBarLabel: "Profil",
-	tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name={"user"} />
+  tabBarLabel: "Profil",
+  tabBarOptions: {
+    activeTintColor: "#041A39",
+    inactiveTintColor: "#ACB9CC"
+  },
+  tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name={"user"} />
+
 };
 
 const MesOffres = createStackNavigator({
@@ -35,10 +68,15 @@ const MesOffres = createStackNavigator({
 });
 
 MesOffres.navigationOptions = {
-	tabBarLabel: "Mes offres",
-	tabBarIcon: ({ focused }) => (
-		<TabBarIcon focused={focused} name={"dollar, usd"} />
-	)
+  tabBarLabel: "Mes offres",
+  tabBarOptions: {
+    activeTintColor: "#041A39",
+    inactiveTintColor: "#ACB9CC"
+  },
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={"dollar, usd"} />
+  )
+
 };
 
 const SettingsStack = createStackNavigator({
@@ -46,13 +84,19 @@ const SettingsStack = createStackNavigator({
 });
 
 SettingsStack.navigationOptions = {
-	tabBarLabel: "Réglages",
-	tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name={"cog"} />
+  tabBarLabel: "Réglages",
+  tabBarOptions: {
+    activeTintColor: "#041A39",
+    inactiveTintColor: "#ACB9CC"
+  },
+  tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name={"cog"} />
 };
 
 export default createBottomTabNavigator({
-	Annonces,
-	Profil,
-	MesOffres,
-	SettingsStack
+  Profil,
+  Annonces,
+
+  MesOffres,
+  SettingsStack
+
 });

@@ -2,6 +2,7 @@ import React from "react";
 import { Image, View, Text, StyleSheet, ScrollView } from "react-native";
 
 export default class MesOffres extends React.Component {
+  // Barre de navigation
   static navigationOptions = {
     title: "Mes offres",
     headerStyle: {
@@ -13,11 +14,11 @@ export default class MesOffres extends React.Component {
       color: "white"
     }
   };
-
+  // Définition des états
   state = {
     BarrePosition: "BarrePosition0"
   };
-
+  // Render
   render() {
     return (
       <View>

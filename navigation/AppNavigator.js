@@ -1,12 +1,14 @@
-import React from "react";
-import { createStackNavigator, createSwitchNavigator } from "react-navigation";
+
+
+import { createSwitchNavigator } from "react-navigation";
 
 import MainTabNavigator from "./MainTabNavigator";
 import AuthStack from "./AuthStack";
-import Profil from "../screens/Profil/Profil";
-// import HousingListContainer from "./src/containers/HousingList";
+import AnnoncesDetails from "../screens/Annonces/AnnoncesDetails";
+
 
 export default createSwitchNavigator({
   Main: MainTabNavigator,
+  AnnoncesDetails: AnnoncesDetails,
   Auth: AuthStack
 });

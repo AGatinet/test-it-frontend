@@ -1,12 +1,13 @@
 import React from "react";
 import { Platform } from "react-native";
 import {
-  createStackNavigator,
-  createBottomTabNavigator
+	createStackNavigator,
+	createBottomTabNavigator
 } from "react-navigation";
 
 import TabBarIcon from "../components/TabBarIcon";
 import AnnoncesScreen from "../screens/Annonces/Annonces";
+import AnnoncesDetailsScreen from "../screens/Annonces/AnnoncesDetails";
 import ProfilScreen from "../screens/Profil/Profil";
 import MesOffresScreen from "../screens/Mesoffres/MesOffres";
 import ReglagesScreen from "../screens/Reglages/Reglages";
@@ -59,10 +60,11 @@ Profil.navigationOptions = {
     inactiveTintColor: "#ACB9CC"
   },
   tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name={"user"} />
+
 };
 
 const MesOffres = createStackNavigator({
-  MesOffres: MesOffresScreen
+	MesOffres: MesOffresScreen
 });
 
 MesOffres.navigationOptions = {
@@ -74,10 +76,11 @@ MesOffres.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={"dollar, usd"} />
   )
+
 };
 
 const SettingsStack = createStackNavigator({
-  Settings: ReglagesScreen
+	Settings: ReglagesScreen
 });
 
 SettingsStack.navigationOptions = {
@@ -95,4 +98,5 @@ export default createBottomTabNavigator({
 
   MesOffres,
   SettingsStack
+
 });

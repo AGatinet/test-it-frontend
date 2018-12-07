@@ -16,7 +16,10 @@ import {
 
 export default class LogIn extends React.Component {
   static navigationOptions = {
-    title: "Log In"
+    title: "Connexion",
+    headerStyle: {
+      backgroundColor: "rgb(239,239,244)"
+    }
     //header: null //pour enlever le header
   };
 
@@ -38,7 +41,7 @@ export default class LogIn extends React.Component {
         console.log("response****", response.data);
 
         if (response) {
-          navigate("Annonces", { name: "Home" });
+          navigate("Annonces", { _id: response.data._id });
         }
       })
       .catch(err => {
@@ -60,9 +63,16 @@ export default class LogIn extends React.Component {
           justifyContent: "center"
         }}
       >
-        <Text style={{ fontSize: 30, color: "black", alignSelf: "center" }}>
-          Logo Test iT
-        </Text>
+        <Image
+          style={{
+            height: 160,
+            width: 160,
+            alignSelf: "center",
+            marginTop: 30,
+            marginRight: 30
+          }}
+          source={require("../../assets/images/testit-logo.png")}
+        />
         <TextInput
           style={{
             fontSize: 20,

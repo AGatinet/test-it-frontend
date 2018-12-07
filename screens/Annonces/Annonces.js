@@ -7,6 +7,9 @@ import {
 	TouchableOpacity
 } from "react-native";
 import { SearchBar } from "react-native-elements";
+import FeatherIcon from "react-native-vector-icons/Feather";
+import IonIcon from "react-native-vector-icons/Ionicons";
+import RNPickerSelect from "react-native-picker-select";
 import axios from "axios";
 
 export default class Annonces extends React.Component {
@@ -21,31 +24,80 @@ export default class Annonces extends React.Component {
 		}
 	};
 
+	// constructor(props) {
+	// 	super(props);
+	// 	this.state = {
+	// 		id: this.props.navigation.state.params.id,
+	// 		offers: [],
+	// 		searchParams: {
+	// 			title: "",
+	// 			priceMin: "",
+	// 			priceMax: "",
+	// 			sort: ""
+	// 		},
+	// 		filterItems: [
+	// 			{ label: "Prix croissants", value: "Prix croissants" },
+	// 			{ label: "Prix décroissants", value: "Prix décroissants" },
+	// 			{ label: "Les plus récentes", value: "Les plus récentes" },
+	// 			{ label: "Tests les plus courts", value: "Tests les plus courts" },
+	// 			{ label: "Tests les plus longs", value: "Tests les plus longs" }
+	// 		]
+	// 	};
+	// }
+
 	state = {
+		userId: this.props.navigation.state.params.id,
 		offers: [],
 		searchParams: {
 			title: "",
 			priceMin: "",
 			priceMax: "",
-			sort: "date-desc"
-		}
+			sort: ""
+		},
+		filterItems: [
+			{ label: "Prix croissants", value: "Prix croissants" },
+			{ label: "Prix décroissants", value: "Prix décroissants" },
+			{ label: "Les plus récentes", value: "Les plus récentes" },
+			{ label: "Tests les plus courts", value: "Tests les plus courts" },
+			{ label: "Tests les plus longs", value: "Tests les plus longs" }
+		]
 	};
 
-	updateSearchParams = (newSearchParams, callbackFunction) => {
-		// newSearchParams -> { title: "Bonnet" }
-		this.setState(
-			{
-				searchParams: {
-					...this.state.searchParams, // Je récupère toutes les anciennes valeurs des paramètres de recherche
-					...newSearchParams // J'écrase les anciennes valeurs avec les nouvelles valeurs
+	getOffers = () => {
+		axios
+			.get(
+				"http://localhost:3000/home/with-count?age=" +
+					25 +
+					"&genderTarget=Homme",
+				{
+					params: this.state.searchParams
 				}
-			},
-			callbackFunction
-		);
+			)
+			.then(response => {
+				// console.log("Jul le sang", response.data);
+				this.setState({
+					offers: response.data.offers
+				});
+			});
 	};
+
+	// updateSearchParams = (newSearchParams, callbackFunction) => {
+	// 	// newSearchParams -> { title: "Bonnet" }
+	// 	this.setState(
+	// 		{
+	// 			searchParams: {
+	// 				...this.state.searchParams, // Je récupère toutes les anciennes valeurs des paramètres de recherche
+	// 				...newSearchParams // J'écrase les anciennes valeurs avec les nouvelles valeurs
+	// 			}
+	// 		},
+	// 		callbackFunction
+	// 	);
+	// };
 
 	render() {
+		// const { navigate } = this.props.navigation;
 		// console.log("lol", this.state.offers);
+		// console.log("props", this.props.navigation);
 		return (
 			<View style={{ backgroundColor: "#EFEFF4" }}>
 				<SearchBar
@@ -146,11 +198,11 @@ export default class Annonces extends React.Component {
 						</ScrollView>
 					</View>
 					<View
-						style={{
-							borderBottomColor: "rgba(0, 0, 0, 0.16)",
-							borderBottomWidth: 1,
-							borderRadius: 30
-						}}
+					// style={{
+					// 	borderBottomColor: "rgba(0, 0, 0, 0.16)",
+					// 	borderBottomWidth: 1,
+					// 	borderRadius: 30
+					// }}
 					>
 						<Text
 							style={{
@@ -165,6 +217,55 @@ export default class Annonces extends React.Component {
 						>
 							Toutes les annonces
 						</Text>
+						{/* <TextInput
+							ref={el => {
+								this.inputRefs.name = el;
+							}}
+							returnKeyType="next"
+							enablesReturnKeyAutomatically
+							onSubmitEditing={() => {
+								this.inputRefs.picker.togglePicker();
+							}}
+							style={pickerSelectStyles.inputIOS}
+							blurOnSubmit={false}
+						/> */}
+						<RNPickerSelect
+							placeholder={{
+								label: "Filtrer par...",
+								value: null
+							}}
+							items={this.state.filterItems}
+							onValueChange={value => {
+								this.setState(
+									{
+										searchParams: { sort: value }
+									},
+									() => {
+										this.getOffers();
+									}
+								);
+							}}
+							style={{
+								inputIOS: {
+									fontSize: 16,
+									paddingTop: 13,
+									paddingHorizontal: 10,
+									paddingBottom: 12,
+									borderWidth: 1,
+									borderColor: "#B3C0CF",
+									borderRadius: 4,
+									backgroundColor: "white",
+									color: "#041A39",
+									marginLeft: 10,
+									marginRight: 10
+								},
+								icon: {
+									marginRight: 10,
+									borderTopColor: "#041A39"
+								}
+							}}
+							value={this.state.searchParams.sort}
+						/>
 					</View>
 					<FlatList
 						keyExtractor={item => {
@@ -179,8 +280,11 @@ export default class Annonces extends React.Component {
 								>
 									<TouchableOpacity
 										onPress={() => {
-											// this.props.navigation.navigate("Room", item);
-											alert("direction l'offre");
+											this.props.navigation.navigate("AnnoncesDetails", {
+												id: item._id
+											});
+											// alert("direction l'offre");
+											// navigate("AnnoncesDetails", { id: item._id });
 										}}
 										style={{
 											borderColor: "#B3C0CF",
@@ -200,6 +304,14 @@ export default class Annonces extends React.Component {
 												borderBottomWidth: 1
 											}}
 										>
+											<View
+												style={{
+													width: 50,
+													height: 50,
+													backgroundColor: "lightblue",
+													marginRight: 10
+												}}
+											/>
 											{/* <Image source={item.company && item.company.companyAccount.companyLogo} */}
 											<View
 												style={{
@@ -229,20 +341,69 @@ export default class Annonces extends React.Component {
 										<View
 											style={{
 												display: "flex",
-												justifyContent: "center",
-												alignItems: "center",
-												padding: 10
+												// justifyContent: "center",
+												// alignItems: "center",
+												padding: 10,
+												flexDirection: "row"
 											}}
 										>
-											<Text style={{ color: "#041A39", fontSize: 13 }}>
-												Type de test : {item.typeOffer}
-											</Text>
-											<Text style={{ color: "#567294", fontSize: 13 }}>
-												{item.availabilities} place(s) restante(s)
-											</Text>
-											<Text style={{ color: "#567294", fontSize: 13 }}>
-												Temps de test : {item.duration}
-											</Text>
+											<View
+												style={{
+													width: 100,
+													height: 100,
+													backgroundColor: "lightblue",
+													marginRight: 15
+												}}
+											/>
+											<View style={{ display: "flex" }}>
+												<Text
+													style={{
+														color: "#041A39",
+														fontSize: 13,
+														flex: 1,
+														fontWeight: "bold"
+													}}
+												>
+													Type de test : {item.typeOffer}
+												</Text>
+												<View
+													style={{
+														display: "flex",
+														flexDirection: "row",
+														// justifyContent: "center",
+														alignItems: "center",
+														flex: 1
+													}}
+												>
+													<IonIcon
+														name="ios-people"
+														color="#567294"
+														// marginRight="10"
+														// size="25"
+													/>
+													<Text style={{ color: "#567294", fontSize: 13 }}>
+														{item.availabilities} place(s) restante(s)
+													</Text>
+												</View>
+												<View
+													style={{
+														display: "flex",
+														flexDirection: "row",
+														// justifyContent: "center",
+														alignItems: "center",
+														flex: 1
+													}}
+												>
+													<FeatherIcon
+														name="clock"
+														color="#567294"
+														// style={{ marginRight: 10, size: 25 }}
+													/>
+													<Text style={{ color: "#567294", fontSize: 13 }}>
+														Temps de test : {item.duration}
+													</Text>
+												</View>
+											</View>
 										</View>
 									</TouchableOpacity>
 								</View>
@@ -254,15 +415,6 @@ export default class Annonces extends React.Component {
 		);
 	}
 	componentDidMount() {
-		axios
-			.get("http://localhost:3000/home?age=" + 25 + "&genderTarget=Homme", {
-				params: this.state.searchParams
-			})
-			.then(response => {
-				// console.log("Jul le sang", response.data);
-				this.setState({
-					offers: response.data
-				});
-			});
+		this.getOffers();
 	}
 }

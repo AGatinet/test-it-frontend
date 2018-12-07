@@ -24,20 +24,22 @@ export default class StatingProfileScreen extends React.Component {
   };
 
   state = {
-    email: "",
-    password: "",
-    isAuthenticated: false
+    firstName: "",
+    lastName: "",
+    age: "",
+    sex: ""
   };
 
-  componentDidMount() {
-    this.setState({ ...this.props.navigation.state.params });
-  }
+  // componentDidMount() {
+  //   this.setState({ ...this.props.navigation.state.params });
+  // }
 
   handleSubmit = () => {
     const { navigate } = this.props.navigation;
 
     axios
       .post("http://localhost:3000/user/update", {
+        _id: this.props.navigation.state.params,
         firstName: this.state.firstName,
         lastName: this.state.lastName,
         sex: this.state.sex,
@@ -47,7 +49,7 @@ export default class StatingProfileScreen extends React.Component {
         //console.log("response****", response.data);
 
         if (response) {
-          navigate("Home", { name: "Home" });
+          navigate("Annonces", { name: "Home" });
         }
       })
       .catch(err => {
@@ -57,7 +59,8 @@ export default class StatingProfileScreen extends React.Component {
   };
 
   render() {
-    console.log("mystates", this.state);
+    //console.log("mystates", this.state);
+    console.log("zidane mec il est chaud", this.props.navigation.state.params);
 
     return (
       <View style={{ marginLeft: 20, marginRight: 20, marginTop: 30, flex: 1 }}>

@@ -34,10 +34,10 @@ export default class SignUpScreen extends React.Component {
         password: this.state.password
       })
       .then(response => {
-        console.log("response****", response.data);
+        console.log("response**** :");
 
         if (response) {
-          navigate("StartingProfile", response.data);
+          navigate("StartingProfile", { _id: response.data._id });
         }
       })
       .catch(err => {

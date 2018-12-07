@@ -17,16 +17,7 @@ const Annonces = createStackNavigator({
 
 Annonces.navigationOptions = {
   tabBarLabel: "Annonces",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === "ios"
-          ? `ios-information-circle${focused ? "" : "-outline"}`
-          : "md-information-circle"
-      }
-    />
-  )
+  tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name={"home"} />
 };
 
 const Profil = createStackNavigator({
@@ -35,16 +26,7 @@ const Profil = createStackNavigator({
 
 Profil.navigationOptions = {
   tabBarLabel: "Profil",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === "ios"
-          ? `ios-information-circle${focused ? "" : "-outline"}`
-          : "md-information-circle"
-      }
-    />
-  )
+  tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name={"user"} />
 };
 
 const MesOffres = createStackNavigator({
@@ -54,10 +36,7 @@ const MesOffres = createStackNavigator({
 MesOffres.navigationOptions = {
   tabBarLabel: "Mes offres",
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === "ios" ? "ios-link" : "md-link"}
-    />
+    <TabBarIcon focused={focused} name={"dollar, usd"} />
   )
 };
 
@@ -66,13 +45,8 @@ const SettingsStack = createStackNavigator({
 });
 
 SettingsStack.navigationOptions = {
-  tabBarLabel: "Settings",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === "ios" ? "ios-options" : "md-options"}
-    />
-  )
+  tabBarLabel: "Réglages",
+  tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name={"cog"} />
 };
 
 export default createBottomTabNavigator({

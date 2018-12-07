@@ -44,8 +44,8 @@ const styles = StyleSheet.create({
   conexion: {
     paddingLeft: 28,
     paddingRight: 28,
-    paddingTop: 3,
-    paddingBottom: 3,
+    paddingTop: 5,
+    paddingBottom: 5,
     borderRadius: 20,
     backgroundColor: "#4267B2",
     alignItems: "center",

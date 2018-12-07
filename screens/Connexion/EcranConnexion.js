@@ -14,6 +14,7 @@ import {
 // pierre@msn.com
 //  pierre
 
+
 export default class SignUpScreen extends React.Component {
 	static navigationOptions = {
 		title: "Log In"
@@ -25,6 +26,7 @@ export default class SignUpScreen extends React.Component {
 		password: "phou",
 		isAuthenticated: false
 	};
+
 
 	handleSubmit = () => {
 		const { navigate } = this.props.navigation;

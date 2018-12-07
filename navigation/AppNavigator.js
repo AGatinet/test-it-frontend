@@ -5,6 +5,6 @@ import MainTabNavigator from "./MainTabNavigator";
 import AuthStack from "./AuthStack";
 
 export default createSwitchNavigator({
-  Auth: AuthStack,
-  Main: MainTabNavigator
+  Main: MainTabNavigator,
+  Auth: AuthStack
 });

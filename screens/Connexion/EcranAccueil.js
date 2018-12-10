@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Alert,
   Button,
   View,
   Text,
@@ -14,6 +15,40 @@ export default class MainScreen extends React.Component {
     title: "TEST-IT",
     header: null
   };
+  async logInFB() {
+    const { navigate } = this.props.navigation;
+
+    try {
+      const {
+        type,
+        token,
+        expires,
+        permissions,
+        declinedPermissions
+      } = await Expo.Facebook.logInWithReadPermissionsAsync(
+        "1395611170573031",
+        {
+          permissions: ["public_profile"]
+        }
+      );
+      if (type === "success") {
+        // Get the user's name using Facebook's Graph API
+        const response = await fetch(
+          `https://graph.facebook.com/me?access_token=${token}`
+        );
+
+        const jsonResponse = await response.json();
+
+        // Alert.alert("Logged in!", `Hi ${(await response.json()).name}!`);
+        Alert.alert("Connexion réussie.");
+        navigate("Annonces");
+      } else {
+        // type === 'cancel'
+      }
+    } catch ({ message }) {
+      Alert.alert(`Facebook Login Error: ${message}`);
+    }
+  }
 
   render() {
     const { navigate } = this.props.navigation;
@@ -45,6 +80,7 @@ export default class MainScreen extends React.Component {
               ...styles.conexion,
               flexDirection: "row"
             }}
+            onPress={() => this.logInFB()}
           >
             <Icon
               name="facebook-square"

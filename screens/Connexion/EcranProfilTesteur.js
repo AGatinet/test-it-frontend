@@ -39,7 +39,7 @@ export default class StatingProfileScreen extends React.Component {
       (this.state.firstName !== "") &
       (this.state.lastName !== "") &
       (this.state.sex !== "") &
-      (this.state.birthDate !== "")
+      (this.state.birthDate !== new Date())
     ) {
       return (
         <TouchableOpacity
@@ -73,17 +73,6 @@ export default class StatingProfileScreen extends React.Component {
         birthDate
       })
       .then(response => {
-        // A METTRE DANS LE CODE FINAL
-
-        // if (
-        //   firstName === "" ||
-        //   lastName === "" ||
-        //   birthDate === "" ||
-        //   sex === ""
-        // ) {
-        //   return alert("Veuillez compléter tous les champs");
-        // }
-
         if (response) {
           navigate("Transition", {
             _id: response.data._id,
@@ -148,25 +137,6 @@ export default class StatingProfileScreen extends React.Component {
           value={this.state.lastName}
           onChangeText={lastName => this.setState({ lastName })}
         />
-        <Text style={{ marginTop: 10 }}>Sexe</Text>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-evenly",
-            marginTop: 10
-          }}
-        >
-          <ButtonSex
-            type="Homme"
-            selected={this.state.sex === "homme" ? true : false}
-            onPress={() => this.setState({ sex: "homme" })}
-          />
-          <ButtonSex
-            type="Femme"
-            selected={this.state.sex === "femme" ? true : false}
-            onPress={() => this.setState({ sex: "femme" })}
-          />
-        </View>
         <Text style={{ marginTop: 20 }}>Date de naissance</Text>
 
         <View
@@ -187,6 +157,26 @@ export default class StatingProfileScreen extends React.Component {
             birthDate={this.state.birthDate}
           />
         </View>
+        <Text style={{ marginTop: 10 }}>Sexe</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-evenly",
+            marginTop: 10
+          }}
+        >
+          <ButtonSex
+            type="Homme"
+            selected={this.state.sex === "homme" ? true : false}
+            onPress={() => this.setState({ sex: "homme" })}
+          />
+          <ButtonSex
+            type="Femme"
+            selected={this.state.sex === "femme" ? true : false}
+            onPress={() => this.setState({ sex: "femme" })}
+          />
+        </View>
+
         {this.renderIcon()}
       </View>
     );

@@ -1,5 +1,7 @@
 import React from "react";
+import axios from "axios";
 import {
+  Alert,
   Button,
   View,
   Text,
@@ -14,6 +16,59 @@ export default class MainScreen extends React.Component {
     title: "TEST-IT",
     header: null
   };
+  async logInFB() {
+    const { navigate } = this.props.navigation;
+
+    try {
+      const {
+        type,
+        token,
+        expires,
+        permissions,
+        declinedPermissions
+      } = await Expo.Facebook.logInWithReadPermissionsAsync(
+        "1395611170573031",
+        {
+          permissions: ["public_profile", "email"]
+        }
+      );
+      if (type === "success") {
+        // Get the user's name using Facebook's Graph API
+        const response = await fetch(
+          `https://graph.facebook.com/me?access_token=${token}&fields=id,name,email,about,picture`
+        );
+
+        const jsonResponse = await response.json();
+        console.log("jsonResponse", jsonResponse);
+        // Alert.alert("Logged in!", `Hi ${(await response.json()).name}!`);
+        Alert.alert("Connexion réussie.");
+        const { navigate } = this.props.navigation;
+
+        axios
+          .post("http://localhost:3000/facebook/log_in", {
+            email: jsonResponse.email,
+
+            firstName: jsonResponse.name,
+            lastName: jsonResponse.name
+          })
+          .then(response => {
+            console.log("response****", response.data);
+
+            if (response) {
+              navigate("Annonces", { id: response.data._id });
+            }
+          })
+          .catch(err => {
+            console.log("erreur", err);
+            alert("Mauvais identifiant ou mauvais mot de passe");
+          });
+      } else {
+        // type === 'cancel'
+      }
+    } catch ({ message }) {
+      Alert.alert(`Facebook Login Error: ${message}`);
+    }
+  }
 
   render() {
     const { navigate } = this.props.navigation;
@@ -25,7 +80,7 @@ export default class MainScreen extends React.Component {
               height: 160,
               width: 160,
               alignSelf: "center",
-              marginTop: 30,
+              marginTop: 150,
               marginRight: 30
             }}
             source={require("../../assets/images/testit-logo.png")}
@@ -45,6 +100,7 @@ export default class MainScreen extends React.Component {
               ...styles.conexion,
               flexDirection: "row"
             }}
+            onPress={() => this.logInFB()}
           >
             <Icon
               name="facebook-square"

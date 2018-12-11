@@ -31,6 +31,7 @@ export default class StatingProfileScreen extends React.Component {
 	// 	console.log("did mount", this.state);
 	// }
 
+
 	renderIcon = () => {
 		if (
 			(this.state.firstName !== "") &
@@ -70,16 +71,6 @@ export default class StatingProfileScreen extends React.Component {
 				birthDate
 			})
 			.then(response => {
-				// A METTRE DANS LE CODE FINAL
-
-				// if (
-				//   firstName === "" ||
-				//   lastName === "" ||
-				//   birthDate === "" ||
-				//   sex === ""
-				// ) {
-				//   return alert("Veuillez compléter tous les champs");
-				// }
 
 				if (response) {
 					AsyncStorage.setItem(
@@ -100,95 +91,98 @@ export default class StatingProfileScreen extends React.Component {
 		// console.log("this.props.navigation.state.params",
 		//   this.props.navigation.state.params)
 
-		return (
-			<View
-				style={{
-					marginLeft: 20,
-					marginRight: 20,
-					marginTop: 30,
-					flex: 1,
-					backgroundColor: "rgb( 239,239,244)"
-				}}
-			>
-				<Text>Prénom</Text>
-				<TextInput
-					style={{
-						fontSize: 20,
-						color: "black",
-						height: 35,
-						backgroundColor: "white",
-						marginTop: 10,
-						paddingLeft: 6,
-						fontSize: 15,
-						borderWidth: 1,
-						borderColor: "rgb(103,114,129)",
-						paddingBottom: 5
-					}}
-					type="text"
-					name="firstName"
-					value={this.state.firstName}
-					onChangeText={firstName => this.setState({ firstName })}
-				/>
-				<Text style={{ marginTop: 10 }}>Nom</Text>
-				<TextInput
-					style={{
-						fontSize: 20,
-						backgroundColor: "white",
-						color: "black",
-						height: 35,
-						fontSize: 15,
-						paddingLeft: 6,
-						marginTop: 10,
-						borderWidth: 1,
-						borderColor: "rgb(103,114,129)",
-						paddingBottom: 5
-					}}
-					type="text"
-					name="lastName"
-					value={this.state.lastName}
-					onChangeText={lastName => this.setState({ lastName })}
-				/>
-				<Text style={{ marginTop: 10 }}>Sexe</Text>
-				<View
-					style={{
-						flexDirection: "row",
-						justifyContent: "space-evenly",
-						marginTop: 10
-					}}
-				>
-					<ButtonSex
-						type="Homme"
-						selected={this.state.sex === "homme" ? true : false}
-						onPress={() => this.setState({ sex: "homme" })}
-					/>
-					<ButtonSex
-						type="Femme"
-						selected={this.state.sex === "femme" ? true : false}
-						onPress={() => this.setState({ sex: "femme" })}
-					/>
-				</View>
-				<Text style={{ marginTop: 20 }}>Date de naissance</Text>
 
-				<View
-					style={{
-						height: 35,
-						backgroundColor: "white",
-						marginTop: 10,
-						borderWidth: 1,
-						borderColor: "rgb(103,114,129)",
-						justifyContent: "center",
-						alignItems: "center"
-					}}
-				>
-					<DateTimePickerTester
-						changeDate={birthDate => {
-							this.setState({ birthDate });
-						}}
-						birthDate={this.state.birthDate}
-					/>
-				</View>
-				{this.renderIcon()}
-			</View>
-		);
-	}
+    return (
+      <View
+        style={{
+          marginLeft: 20,
+          marginRight: 20,
+          marginTop: 30,
+          flex: 1,
+          backgroundColor: "rgb( 239,239,244)"
+        }}
+      >
+        <Text>Prénom</Text>
+        <TextInput
+          style={{
+            fontSize: 20,
+            color: "black",
+            height: 35,
+            backgroundColor: "white",
+            marginTop: 10,
+            paddingLeft: 6,
+            fontSize: 15,
+            borderWidth: 1,
+            borderColor: "rgb(103,114,129)",
+            paddingBottom: 5
+          }}
+          type="text"
+          name="firstName"
+          value={this.state.firstName}
+          onChangeText={firstName => this.setState({ firstName })}
+        />
+        <Text style={{ marginTop: 10 }}>Nom</Text>
+        <TextInput
+          style={{
+            fontSize: 20,
+            backgroundColor: "white",
+            color: "black",
+            height: 35,
+            fontSize: 15,
+            paddingLeft: 6,
+            marginTop: 10,
+            borderWidth: 1,
+            borderColor: "rgb(103,114,129)",
+            paddingBottom: 5
+          }}
+          type="text"
+          name="lastName"
+          value={this.state.lastName}
+          onChangeText={lastName => this.setState({ lastName })}
+        />
+        <Text style={{ marginTop: 20 }}>Date de naissance</Text>
+
+        <View
+          style={{
+            height: 35,
+            backgroundColor: "white",
+            marginTop: 10,
+            borderWidth: 1,
+            borderColor: "rgb(103,114,129)",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <DateTimePickerTester
+            changeDate={birthDate => {
+              this.setState({ birthDate });
+            }}
+            birthDate={this.state.birthDate}
+          />
+        </View>
+        <Text style={{ marginTop: 10 }}>Sexe</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-evenly",
+            marginTop: 10
+          }}
+        >
+          <ButtonSex
+            type="Homme"
+            selected={this.state.sex === "homme" ? true : false}
+            onPress={() => this.setState({ sex: "homme" })}
+          />
+          <ButtonSex
+            type="Femme"
+            selected={this.state.sex === "femme" ? true : false}
+            onPress={() => this.setState({ sex: "femme" })}
+          />
+        </View>
+
+        {this.renderIcon()}
+      </View>
+    );
+  }
+
 }

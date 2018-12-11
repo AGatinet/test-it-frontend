@@ -38,6 +38,7 @@ export default class LogIn extends React.Component {
 			.then(response => {
 				// console.log("response****", response.data);
 
+
 				if (response) {
 					AsyncStorage.setItem(
 						"userInformation",
@@ -53,6 +54,7 @@ export default class LogIn extends React.Component {
 				alert("Mauvais identifiant ou mauvais mot de passe");
 			});
 	};
+
 
 	render() {
 		return (

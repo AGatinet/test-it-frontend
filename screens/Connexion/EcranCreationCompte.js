@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   TextInput
 } from "react-native";
-
+import Icono from "react-native-vector-icons/FontAwesome";
 // pierre@msn.com
 //  pierre
 
@@ -26,6 +26,7 @@ export default class SignUpScreen extends React.Component {
   state = {
     email: "jo@msn.com",
     password: "jo"
+    //hasCheckedEmail: false
   };
 
   handleSubmit = () => {
@@ -48,6 +49,17 @@ export default class SignUpScreen extends React.Component {
       });
   };
 
+  // renderIconEmail = () => {
+  //   axios
+  //     .post("http://localhost:3000/freeemail", {
+  //       hasCheckedEmail: this.state.hasCheckedEmail
+  //     })
+  //     .then(response => {
+  //       if (response) {
+  //         return <Icono name="check-circle" size={30} color="green" />;
+  //       }
+  //     });
+  // };
   render() {
     return (
       <KeyboardAvoidingView
@@ -108,6 +120,7 @@ export default class SignUpScreen extends React.Component {
           value={this.state.password}
           onChangeText={text => this.setState({ password: text })}
         />
+        {/* {this.state.hasCheckedEmail  && this.renderIconEmail()} */}
         <TouchableOpacity
           style={{
             height: 40,

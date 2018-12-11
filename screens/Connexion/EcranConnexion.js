@@ -41,7 +41,7 @@ export default class LogIn extends React.Component {
         console.log("response****", response.data);
 
         if (response) {
-          navigate("Annonces", { _id: response.data._id });
+          navigate("Annonces", { id: response.data._id });
         }
       })
       .catch(err => {

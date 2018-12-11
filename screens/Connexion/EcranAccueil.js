@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import {
   Alert,
   Button,
@@ -28,20 +29,39 @@ export default class MainScreen extends React.Component {
       } = await Expo.Facebook.logInWithReadPermissionsAsync(
         "1395611170573031",
         {
-          permissions: ["public_profile"]
+          permissions: ["public_profile", "email"]
         }
       );
       if (type === "success") {
         // Get the user's name using Facebook's Graph API
         const response = await fetch(
-          `https://graph.facebook.com/me?access_token=${token}`
+          `https://graph.facebook.com/me?access_token=${token}&fields=id,name,email,about,picture`
         );
 
         const jsonResponse = await response.json();
-
+        console.log("jsonResponse", jsonResponse);
         // Alert.alert("Logged in!", `Hi ${(await response.json()).name}!`);
         Alert.alert("Connexion réussie.");
-        navigate("Annonces");
+        const { navigate } = this.props.navigation;
+
+        axios
+          .post("http://localhost:3000/facebook/log_in", {
+            email: jsonResponse.email,
+
+            firstName: jsonResponse.name,
+            lastName: jsonResponse.name
+          })
+          .then(response => {
+            console.log("response****", response.data);
+
+            if (response) {
+              navigate("Annonces", { id: response.data._id });
+            }
+          })
+          .catch(err => {
+            console.log("erreur", err);
+            alert("Mauvais identifiant ou mauvais mot de passe");
+          });
       } else {
         // type === 'cancel'
       }
@@ -60,7 +80,7 @@ export default class MainScreen extends React.Component {
               height: 160,
               width: 160,
               alignSelf: "center",
-              marginTop: 30,
+              marginTop: 150,
               marginRight: 30
             }}
             source={require("../../assets/images/testit-logo.png")}

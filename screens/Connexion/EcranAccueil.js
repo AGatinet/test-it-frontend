@@ -47,9 +47,9 @@ export default class FirstMainScreen extends React.Component {
         axios
           .post("http://localhost:3000/facebook/log_in", {
             email: jsonResponse.email,
-
             firstName: jsonResponse.name,
-            lastName: jsonResponse.name
+            lastName: jsonResponse.name,
+            photo: jsonResponse.picture.data.url
           })
           .then(response => {
             console.log("response****", response.data);

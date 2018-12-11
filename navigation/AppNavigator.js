@@ -5,7 +5,8 @@ import AuthStack from "./AuthStack";
 import AnnoncesDetails from "../screens/Annonces/AnnoncesDetails";
 
 export default createSwitchNavigator({
-  Auth: AuthStack,
   Main: MainTabNavigator,
+  Auth: AuthStack,
+
   AnnoncesDetails: AnnoncesDetails
 });

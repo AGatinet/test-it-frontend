@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import BackGroundImage from "../../components/BackGroundImage";
-export default class MainScreen extends React.Component {
+export default class FirstMainScreen extends React.Component {
   static navigationOptions = {
     title: "TEST-IT",
     header: null
@@ -55,7 +55,10 @@ export default class MainScreen extends React.Component {
             console.log("response****", response.data);
 
             if (response) {
-              navigate("Annonces", { id: response.data._id });
+              navigate("Transition", {
+                _id: response.data._id,
+                firstName: response.data.account.firstName
+              });
             }
           })
           .catch(err => {

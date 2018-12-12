@@ -119,9 +119,11 @@ export default class Annonces extends React.Component {
 	// };
 
 
+
   render() {
     // const { navigate } = this.props.navigation;
     // console.log("lol", this.state.searchParams.title);
+    // console.log("this.props", this.props);
 
     return (
       <View style={{ backgroundColor: "#EFEFF4" }}>

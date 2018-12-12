@@ -39,7 +39,11 @@ export default class App extends React.Component {
         // We include SpaceMono because we use it in HomeScreen.js. Feel free
         // to remove this if you are not using it in your app
         "space-mono": require("./assets/fonts/SpaceMono-Regular.ttf"),
-        icomoon: require("./assets/fonts/icomoon.ttf")
+        icomoon: require("./assets/fonts/icomoon.ttf"),
+        Interfearence: require("./assets/fonts/Interfearence.ttf"),
+        "Antipasto-Pro-Regular-trial": require("./assets/fonts/Antipasto-Pro-Regular-trial.ttf"),
+        quartzo: require("./assets/fonts/quartzo.ttf")
+        //SKULLX: require("./assets/fonts/SKULLX.ttf")
       })
     ]);
   };

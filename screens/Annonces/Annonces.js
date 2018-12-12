@@ -72,7 +72,7 @@ export default class Annonces extends React.Component {
 			const today = new Date();
 			const birthDate = new Date(userInformation.account.birthDate);
 			const age = today.getFullYear() - birthDate.getFullYear();
-			// console.log(userInformation);
+			// console.log(age, userInformation);
 			axios
 				.get(
 					"http://localhost:3000/home/with-count?age=" +
@@ -84,7 +84,7 @@ export default class Annonces extends React.Component {
 					}
 				)
 				.then(response => {
-					// console.log("Jul le sang", response.data);
+					// console.log("Jul le sang", reasponse.data);
 					this.setState({
 						offers: response.data.offers
 					});
@@ -318,7 +318,7 @@ export default class Annonces extends React.Component {
 						}}
 						data={this.state.offers}
 						renderItem={({ item }) => {
-							// console.log("lien", item.company.companyAccount.companyLogo[0]);
+							// console.log("lien", item.company.companyAccount.companyLogo);
 							return (
 								<View
 									style={{ marginTop: 15, marginLeft: 10, marginRight: 10 }}
@@ -351,19 +351,21 @@ export default class Annonces extends React.Component {
 										>
 											<View
 												style={{
-													width: 50,
 													height: 50,
+													width: 100,
 													backgroundColor: "lightblue",
-													marginRight: 10
+													marginRight: 10,
+													display: "flex"
 												}}
-											/>
-											{/* <Image
-												source={{
-													uri:
-														'"' + item.company &&
-														item.company.companyAccount.companyLogo[0] + '"'
-												}}
-											/> */}
+											>
+												<Image
+													style={{ flex: 1 }}
+													source={{
+														uri: item.company.companyAccount.companyLogo
+													}}
+													resizeMode="contain"
+												/>
+											</View>
 											<View
 												style={{
 													display: "flex",

@@ -9,9 +9,6 @@ import {
   TextInput
 } from "react-native";
 
-// pierre@msn.com
-//  pierre
-
 export default class LogIn extends React.Component {
   static navigationOptions = {
     title: "Connexion",
@@ -37,13 +34,15 @@ export default class LogIn extends React.Component {
       })
       .then(response => {
         // console.log("response****", response.data);
+        // AsyncStorage.setItem("userToken", JSON.stringify(response.data));
+        // this.props.navigation.navigate("Main", { _id: response.data._id });
 
         if (response) {
           AsyncStorage.setItem(
             "userInformation",
             JSON.stringify(response.data),
             () => {
-              navigate("Main");
+              navigate("Main", { _id: response.data._id });
             }
           );
         }

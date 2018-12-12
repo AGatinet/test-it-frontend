@@ -1,12 +1,12 @@
 import React from "react";
 import {
-	View,
-	Text,
-	ScrollView,
-	FlatList,
-	TouchableOpacity,
-	AsyncStorage,
-	Image
+  View,
+  Text,
+  ScrollView,
+  FlatList,
+  TouchableOpacity,
+  AsyncStorage,
+  Image
 } from "react-native";
 import { SearchBar } from "react-native-elements";
 import FeatherIcon from "react-native-vector-icons/Feather";
@@ -15,55 +15,56 @@ import RNPickerSelect from "react-native-picker-select";
 import axios from "axios";
 
 export default class Annonces extends React.Component {
-	static navigationOptions = {
-		title: "Annonces",
-		headerStyle: {
-			backgroundColor: "#041A39"
-		},
-		headerTintColor: "#ffffff",
-		headerTitleStyle: {
-			fontWeight: "bold"
-		}
-	};
+  static navigationOptions = {
+    title: "Annonces",
+    headerStyle: {
+      backgroundColor: "#041A39"
+    },
+    headerTintColor: "#ffffff",
+    headerTitleStyle: {
+      fontWeight: "bold"
+    }
+  };
 
-	// constructor(props) {
-	// 	super(props);
-	// 	this.state = {
-	// 		id: this.props.navigation.state.params.id,
-	// 		offers: [],
-	// 		searchParams: {
-	// 			title: "",
-	// 			priceMin: "",
-	// 			priceMax: "",
-	// 			sort: ""
-	// 		},
-	// 		filterItems: [
-	// 			{ label: "Prix croissants", value: "Prix croissants" },
-	// 			{ label: "Prix décroissants", value: "Prix décroissants" },
-	// 			{ label: "Les plus récentes", value: "Les plus récentes" },
-	// 			{ label: "Tests les plus courts", value: "Tests les plus courts" },
-	// 			{ label: "Tests les plus longs", value: "Tests les plus longs" }
-	// 		]
-	// 	};
-	// }
+  // constructor(props) {
+  // 	super(props);
+  // 	this.state = {
+  // 		id: this.props.navigation.state.params.id,
+  // 		offers: [],
+  // 		searchParams: {
+  // 			title: "",
+  // 			priceMin: "",
+  // 			priceMax: "",
+  // 			sort: ""
+  // 		},
+  // 		filterItems: [
+  // 			{ label: "Prix croissants", value: "Prix croissants" },
+  // 			{ label: "Prix décroissants", value: "Prix décroissants" },
+  // 			{ label: "Les plus récentes", value: "Les plus récentes" },
+  // 			{ label: "Tests les plus courts", value: "Tests les plus courts" },
+  // 			{ label: "Tests les plus longs", value: "Tests les plus longs" }
+  // 		]
+  // 	};
+  // }
 
-	state = {
-		userId: this.props.navigation.state.params,
-		offers: [],
-		searchParams: {
-			title: "",
-			priceMin: "",
-			priceMax: "",
-			sort: ""
-		},
-		filterItems: [
-			{ label: "Prix croissants", value: "Prix croissants" },
-			{ label: "Prix décroissants", value: "Prix décroissants" },
-			{ label: "Les plus récentes", value: "Les plus récentes" },
-			{ label: "Tests les plus courts", value: "Tests les plus courts" },
-			{ label: "Tests les plus longs", value: "Tests les plus longs" }
-		]
-	};
+  state = {
+    userId: this.props.navigation.state.params,
+    offers: [],
+    searchParams: {
+      title: "",
+      priceMin: "",
+      priceMax: "",
+      sort: ""
+    },
+    filterItems: [
+      { label: "Prix croissants", value: "Prix croissants" },
+      { label: "Prix décroissants", value: "Prix décroissants" },
+      { label: "Les plus récentes", value: "Les plus récentes" },
+      { label: "Tests les plus courts", value: "Tests les plus courts" },
+      { label: "Tests les plus longs", value: "Tests les plus longs" }
+    ]
+  };
+
 
 	getOffers = () => {
 		AsyncStorage.getItem("userInformation", (err, result) => {
@@ -117,151 +118,152 @@ export default class Annonces extends React.Component {
 	// 	);
 	// };
 
-	render() {
-		// const { navigate } = this.props.navigation;
-		// console.log("lol", this.state.searchParams.title);
 
-		return (
-			<View style={{ backgroundColor: "#EFEFF4" }}>
-				<SearchBar
-					name="searchParams.title"
-					placeholder="Chercher une annonce"
-					placeholderTextColor="#8396B2"
-					clearIcon={{ color: "#8396B2" }}
-					containerStyle={{
-						backgroundColor: "#EFEFF4",
-						borderTopWidth: 0,
-						borderBottomColor: "rgba(0, 0, 0, 0.16)",
-						borderBottomWidth: 1,
-						borderRadius: 30
-					}}
-					inputStyle={{
-						marginLeft: 10,
-						fontStyle: "italic",
-						fontSize: 12,
-						color: "#8396B2",
-						backgroundColor: "white",
-						borderColor: "#536D91",
-						borderWidth: 1,
-						borderRadius: 3
-					}}
-					onChangeText={text => {
-						this.setState(
-							{
-								searchParams: { title: text }
-							},
-							() => {
-								// console.log(this.state.searchParams.title);
-								this.getOffers();
-							}
-						);
-					}}
-					// {text => {
-					// 	this.setState({
-					// 		searchParams: {
-					// 			title: text
-					// 		}, () => {
-					// 			this.getOffers();
-					// 		}
-					// 	});
-					// };
-				/>
-				<ScrollView>
-					<View
-						style={{
-							borderBottomColor: "rgba(0, 0, 0, 0.16)",
-							borderBottomWidth: 1,
-							borderRadius: 30
-						}}
-					>
-						<Text
-							style={{
-								color: "#567294",
-								fontSize: 18,
-								fontWeight: "bold",
-								fontStyle: "italic",
-								marginBottom: 10,
-								marginTop: 20,
-								marginLeft: 20
-							}}
-						>
-							A ne pas manquer
-						</Text>
-					</View>
-					<View style={{ display: "flex" }}>
-						<ScrollView
-							horizontal="true"
-							style={{ marginTop: 10 }}
-							contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
-						>
-							<View
-								style={{
-									backgroundColor: "#252525",
-									marginRight: 10,
-									height: 210,
-									width: 250
-								}}
-							>
-								<View style={{ padding: 5 }}>
-									<Text style={{ color: "lightgray" }}>Matthew Mcon...</Text>
-									<Text style={{ color: "#A2A2A2", fontStyle: "italic" }}>
-										Cooper
-									</Text>
-								</View>
-							</View>
-							<View
-								style={{
-									backgroundColor: "#252525",
-									marginRight: 10,
-									height: 210,
-									width: 250
-								}}
-							>
-								<View style={{ padding: 5 }}>
-									<Text style={{ color: "lightgray" }}>Matthew Mcon...</Text>
-									<Text style={{ color: "#A2A2A2", fontStyle: "italic" }}>
-										Cooper
-									</Text>
-								</View>
-							</View>
-							<View
-								style={{
-									backgroundColor: "#252525",
-									marginRight: 10,
-									height: 210,
-									width: 250
-								}}
-							>
-								<View style={{ padding: 5 }}>
-									<Text style={{ color: "lightgray" }}>Matthew Mcon...</Text>
-									<Text style={{ color: "#A2A2A2", fontStyle: "italic" }}>
-										Cooper
-									</Text>
-								</View>
-							</View>
-						</ScrollView>
-					</View>
-					<View
-					// style={{
-					// 	borderBottomColor: "rgba(0, 0, 0, 0.16)",
-					// 	borderBottomWidth: 1,
-					// 	borderRadius: 30
-					// }}
-					>
-						<Text
-							style={{
-								color: "#567294",
-								fontSize: 18,
-								fontWeight: "bold",
-								fontStyle: "italic",
-								marginTop: 20,
-								marginBottom: 10,
-								marginLeft: 20
-							}}
-						>
-							Toutes les annonces
-						</Text>
-						{/* <TextInput
+  render() {
+    // const { navigate } = this.props.navigation;
+    // console.log("lol", this.state.searchParams.title);
+
+    return (
+      <View style={{ backgroundColor: "#EFEFF4" }}>
+        <SearchBar
+          name="searchParams.title"
+          placeholder="Chercher une annonce"
+          placeholderTextColor="#8396B2"
+          clearIcon={{ color: "#8396B2" }}
+          containerStyle={{
+            backgroundColor: "#EFEFF4",
+            borderTopWidth: 0,
+            borderBottomColor: "rgba(0, 0, 0, 0.16)",
+            borderBottomWidth: 1,
+            borderRadius: 30
+          }}
+          inputStyle={{
+            marginLeft: 10,
+            fontStyle: "italic",
+            fontSize: 12,
+            color: "#8396B2",
+            backgroundColor: "white",
+            borderColor: "#536D91",
+            borderWidth: 1,
+            borderRadius: 3
+          }}
+          onChangeText={text => {
+            this.setState(
+              {
+                searchParams: { title: text }
+              },
+              () => {
+                // console.log(this.state.searchParams.title);
+                this.getOffers();
+              }
+            );
+          }}
+          // {text => {
+          // 	this.setState({
+          // 		searchParams: {
+          // 			title: text
+          // 		}, () => {
+          // 			this.getOffers();
+          // 		}
+          // 	});
+          // };
+        />
+        <ScrollView>
+          <View
+            style={{
+              borderBottomColor: "rgba(0, 0, 0, 0.16)",
+              borderBottomWidth: 1,
+              borderRadius: 30
+            }}
+          >
+            <Text
+              style={{
+                color: "#567294",
+                fontSize: 18,
+                fontWeight: "bold",
+                fontStyle: "italic",
+                marginBottom: 10,
+                marginTop: 20,
+                marginLeft: 20
+              }}
+            >
+              A ne pas manquer
+            </Text>
+          </View>
+          <View style={{ display: "flex" }}>
+            <ScrollView
+              horizontal="true"
+              style={{ marginTop: 10 }}
+              contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
+            >
+              <View
+                style={{
+                  backgroundColor: "#252525",
+                  marginRight: 10,
+                  height: 210,
+                  width: 250
+                }}
+              >
+                <View style={{ padding: 5 }}>
+                  <Text style={{ color: "lightgray" }}>Matthew Mcon...</Text>
+                  <Text style={{ color: "#A2A2A2", fontStyle: "italic" }}>
+                    Cooper
+                  </Text>
+                </View>
+              </View>
+              <View
+                style={{
+                  backgroundColor: "#252525",
+                  marginRight: 10,
+                  height: 210,
+                  width: 250
+                }}
+              >
+                <View style={{ padding: 5 }}>
+                  <Text style={{ color: "lightgray" }}>Matthew Mcon...</Text>
+                  <Text style={{ color: "#A2A2A2", fontStyle: "italic" }}>
+                    Cooper
+                  </Text>
+                </View>
+              </View>
+              <View
+                style={{
+                  backgroundColor: "#252525",
+                  marginRight: 10,
+                  height: 210,
+                  width: 250
+                }}
+              >
+                <View style={{ padding: 5 }}>
+                  <Text style={{ color: "lightgray" }}>Matthew Mcon...</Text>
+                  <Text style={{ color: "#A2A2A2", fontStyle: "italic" }}>
+                    Cooper
+                  </Text>
+                </View>
+              </View>
+            </ScrollView>
+          </View>
+          <View
+          // style={{
+          // 	borderBottomColor: "rgba(0, 0, 0, 0.16)",
+          // 	borderBottomWidth: 1,
+          // 	borderRadius: 30
+          // }}
+          >
+            <Text
+              style={{
+                color: "#567294",
+                fontSize: 18,
+                fontWeight: "bold",
+                fontStyle: "italic",
+                marginTop: 20,
+                marginBottom: 10,
+                marginLeft: 20
+              }}
+            >
+              Toutes les annonces
+            </Text>
+            {/* <TextInput
 							ref={el => {
 								this.inputRefs.name = el;
 							}}
@@ -273,6 +275,7 @@ export default class Annonces extends React.Component {
 							style={pickerSelectStyles.inputIOS}
 							blurOnSubmit={false}
 						/> */}
+
 						<RNPickerSelect
 							placeholder={{
 								label: "Filtrer par...",
@@ -470,4 +473,5 @@ export default class Annonces extends React.Component {
 	componentDidMount() {
 		this.getOffers();
 	}
+
 }

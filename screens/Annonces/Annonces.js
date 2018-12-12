@@ -65,57 +65,60 @@ export default class Annonces extends React.Component {
     ]
   };
 
-  getOffers = () => {
-    AsyncStorage.getItem("userInformation", (err, result) => {
-      const userInformation = JSON.parse(result);
-      // console.log(userInformation.account);
-      const today = new Date();
-      const birthDate = new Date(userInformation.account.birthDate);
-      const age = today.getFullYear() - birthDate.getFullYear();
-      console.log(userInformation);
-      axios
-        .get(
-          "http://localhost:3000/home/with-count?age=" +
-            age +
-            "&genderTarget=" +
-            userInformation.account.sex,
-          {
-            params: this.state.searchParams
-          }
-        )
-        .then(response => {
-          // console.log("Jul le sang", response.data);
-          this.setState({
-            offers: response.data.offers
-          });
-        });
-    });
-  };
-  // handleChange = text => {
-  // 	// console.log("benzema", text);
-  // 	// const name = target.name;
-  // 	// // Utile si le formulaire contient des éléments "checkbox"
-  // 	// const value = target.type === "checkbox" ? target.checked : target.value;
-  // 	this.setState({
-  // 		searchParams: {
-  // 			title: text
-  // 		}, () => {
-  // 			this.getOffers();
-  // 		}
-  // 	});
-  // };
-  // updateSearchParams = (newSearchParams, callbackFunction) => {
-  // 	// newSearchParams -> { title: "Bonnet" }
-  // 	this.setState(
-  // 		{
-  // 			searchParams: {
-  // 				...this.state.searchParams, // Je récupère toutes les anciennes valeurs des paramètres de recherche
-  // 				...newSearchParams // J'écrase les anciennes valeurs avec les nouvelles valeurs
-  // 			}
-  // 		},
-  // 		callbackFunction
-  // 	);
-  // };
+
+	getOffers = () => {
+		AsyncStorage.getItem("userInformation", (err, result) => {
+			const userInformation = JSON.parse(result);
+			// console.log(userInformation.account);
+			const today = new Date();
+			const birthDate = new Date(userInformation.account.birthDate);
+			const age = today.getFullYear() - birthDate.getFullYear();
+			// console.log(age, userInformation);
+			axios
+				.get(
+					"http://localhost:3000/home/with-count?age=" +
+						age +
+						"&genderTarget=" +
+						userInformation.account.sex,
+					{
+						params: this.state.searchParams
+					}
+				)
+				.then(response => {
+					// console.log("Jul le sang", reasponse.data);
+					this.setState({
+						offers: response.data.offers
+					});
+				});
+		});
+	};
+	// handleChange = text => {
+	// 	// console.log("benzema", text);
+	// 	// const name = target.name;
+	// 	// // Utile si le formulaire contient des éléments "checkbox"
+	// 	// const value = target.type === "checkbox" ? target.checked : target.value;
+	// 	this.setState({
+	// 		searchParams: {
+	// 			title: text
+	// 		}, () => {
+	// 			this.getOffers();
+	// 		}
+	// 	});
+	// };
+	// updateSearchParams = (newSearchParams, callbackFunction) => {
+	// 	// newSearchParams -> { title: "Bonnet" }
+	// 	this.setState(
+	// 		{
+	// 			searchParams: {
+	// 				...this.state.searchParams, // Je récupère toutes les anciennes valeurs des paramètres de recherche
+	// 				...newSearchParams // J'écrase les anciennes valeurs avec les nouvelles valeurs
+	// 			}
+	// 		},
+	// 		callbackFunction
+	// 	);
+	// };
+
+
 
   render() {
     // const { navigate } = this.props.navigation;
@@ -274,199 +277,203 @@ export default class Annonces extends React.Component {
 							style={pickerSelectStyles.inputIOS}
 							blurOnSubmit={false}
 						/> */}
-            <RNPickerSelect
-              placeholder={{
-                label: "Filtrer par...",
-                value: null
-              }}
-              items={this.state.filterItems}
-              onValueChange={value => {
-                this.setState(
-                  {
-                    searchParams: { sort: value }
-                  },
-                  () => {
-                    this.getOffers();
-                  }
-                );
-              }}
-              style={{
-                inputIOS: {
-                  fontSize: 16,
-                  paddingTop: 13,
-                  paddingHorizontal: 10,
-                  paddingBottom: 12,
-                  borderWidth: 1,
-                  borderColor: "#B3C0CF",
-                  borderRadius: 4,
-                  backgroundColor: "white",
-                  color: "#041A39",
-                  marginLeft: 10,
-                  marginRight: 10
-                },
-                icon: {
-                  marginRight: 10,
-                  borderTopColor: "#041A39"
-                }
-              }}
-              value={this.state.searchParams.sort}
-            />
-          </View>
-          <FlatList
-            keyExtractor={item => {
-              // item est une offre
-              return item._id;
-            }}
-            data={this.state.offers}
-            renderItem={({ item }) => {
-              // console.log("lien", item.company.companyAccount.companyLogo[0]);
-              return (
-                <View
-                  style={{ marginTop: 15, marginLeft: 10, marginRight: 10 }}
-                >
-                  <TouchableOpacity
-                    onPress={() => {
-                      this.props.navigation.navigate("AnnoncesDetails", {
-                        id: item._id
-                      });
-                      // alert("direction l'offre");
-                      // navigate("AnnoncesDetails", { id: item._id });
-                    }}
-                    style={{
-                      borderColor: "#B3C0CF",
-                      borderWidth: 1,
-                      borderRadius: 5,
-                      backgroundColor: "white"
-                    }}
-                  >
-                    <View
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        // justifyContent: "center",
-                        alignItems: "center",
-                        padding: 10,
-                        borderBottomColor: "#B3C0CF",
-                        borderBottomWidth: 1
-                      }}
-                    >
-                      <View
-                        style={{
-                          width: 50,
-                          height: 50,
-                          backgroundColor: "lightblue",
-                          marginRight: 10
-                        }}
-                      />
-                      {/* <Image
-												source={{
-													uri:
-														'"' + item.company &&
-														item.company.companyAccount.companyLogo[0] + '"'
+
+						<RNPickerSelect
+							placeholder={{
+								label: "Filtrer par...",
+								value: null
+							}}
+							items={this.state.filterItems}
+							onValueChange={value => {
+								this.setState(
+									{
+										searchParams: { sort: value }
+									},
+									() => {
+										this.getOffers();
+									}
+								);
+							}}
+							style={{
+								inputIOS: {
+									fontSize: 16,
+									paddingTop: 13,
+									paddingHorizontal: 10,
+									paddingBottom: 12,
+									borderWidth: 1,
+									borderColor: "#B3C0CF",
+									borderRadius: 4,
+									backgroundColor: "white",
+									color: "#041A39",
+									marginLeft: 10,
+									marginRight: 10
+								},
+								icon: {
+									marginRight: 10,
+									borderTopColor: "#041A39"
+								}
+							}}
+							value={this.state.searchParams.sort}
+						/>
+					</View>
+					<FlatList
+						keyExtractor={item => {
+							// item est une offre
+							return item._id;
+						}}
+						data={this.state.offers}
+						renderItem={({ item }) => {
+							// console.log("lien", item.company.companyAccount.companyLogo);
+							return (
+								<View
+									style={{ marginTop: 15, marginLeft: 10, marginRight: 10 }}
+								>
+									<TouchableOpacity
+										onPress={() => {
+											this.props.navigation.navigate("AnnoncesDetails", {
+												id: item._id
+											});
+											// alert("direction l'offre");
+											// navigate("AnnoncesDetails", { id: item._id });
+										}}
+										style={{
+											borderColor: "#B3C0CF",
+											borderWidth: 1,
+											borderRadius: 5,
+											backgroundColor: "white"
+										}}
+									>
+										<View
+											style={{
+												display: "flex",
+												flexDirection: "row",
+												// justifyContent: "center",
+												alignItems: "center",
+												padding: 10,
+												borderBottomColor: "#B3C0CF",
+												borderBottomWidth: 1
+											}}
+										>
+											<View
+												style={{
+													height: 50,
+													width: 100,
+													backgroundColor: "lightblue",
+													marginRight: 10,
+													display: "flex"
 												}}
-											/> */}
-                      <View
-                        style={{
-                          display: "flex",
-                          flex: 1
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: 18,
-                            fontWeight: "bold",
-                            color: "#041A39"
-                          }}
-                        >
-                          {item.company &&
-                            item.company.companyAccount.companyName}
-                          {/* on vérifie que item.company existe avant le populate avec "&&" et ensuite on va chercher la valeur */}
-                        </Text>
-                        <Text style={{ fontStyle: "italic", color: "#567294" }}>
-                          {item.offerName}
-                        </Text>
-                      </View>
-                      <Text style={{ color: "#B2025A", fontSize: 25 }}>
-                        {item.price} €
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        display: "flex",
-                        // justifyContent: "center",
-                        // alignItems: "center",
-                        padding: 10,
-                        flexDirection: "row"
-                      }}
-                    >
-                      <View
-                        style={{
-                          width: 100,
-                          height: 100,
-                          backgroundColor: "lightblue",
-                          marginRight: 15
-                        }}
-                      />
-                      <View style={{ display: "flex" }}>
-                        <Text
-                          style={{
-                            color: "#041A39",
-                            fontSize: 13,
-                            flex: 1,
-                            fontWeight: "bold"
-                          }}
-                        >
-                          Type de test : {item.typeOffer}
-                        </Text>
-                        <View
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            // justifyContent: "center",
-                            alignItems: "center",
-                            flex: 1
-                          }}
-                        >
-                          <IonIcon
-                            name="ios-people"
-                            color="#567294"
-                            // marginRight="10"
-                            // size="25"
-                          />
-                          <Text style={{ color: "#567294", fontSize: 13 }}>
-                            {item.availabilities} place(s) restante(s)
-                          </Text>
-                        </View>
-                        <View
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            // justifyContent: "center",
-                            alignItems: "center",
-                            flex: 1
-                          }}
-                        >
-                          <FeatherIcon
-                            name="clock"
-                            color="#567294"
-                            // style={{ marginRight: 10, size: 25 }}
-                          />
-                          <Text style={{ color: "#567294", fontSize: 13 }}>
-                            Temps de test : {item.duration}
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              );
-            }}
-          />
-        </ScrollView>
-      </View>
-    );
-  }
-  componentDidMount() {
-    this.getOffers();
-  }
+											>
+												<Image
+													style={{ flex: 1 }}
+													source={{
+														uri: item.company.companyAccount.companyLogo
+													}}
+													resizeMode="contain"
+												/>
+											</View>
+											<View
+												style={{
+													display: "flex",
+													flex: 1
+												}}
+											>
+												<Text
+													style={{
+														fontSize: 18,
+														fontWeight: "bold",
+														color: "#041A39"
+													}}
+												>
+													{item.company &&
+														item.company.companyAccount.companyName}
+													{/* on vérifie que item.company existe avant le populate avec "&&" et ensuite on va chercher la valeur */}
+												</Text>
+												<Text style={{ fontStyle: "italic", color: "#567294" }}>
+													{item.offerName}
+												</Text>
+											</View>
+											<Text style={{ color: "#B2025A", fontSize: 25 }}>
+												{item.price} €
+											</Text>
+										</View>
+										<View
+											style={{
+												display: "flex",
+												// justifyContent: "center",
+												// alignItems: "center",
+												padding: 10,
+												flexDirection: "row"
+											}}
+										>
+											<View
+												style={{
+													width: 100,
+													height: 100,
+													backgroundColor: "lightblue",
+													marginRight: 15
+												}}
+											/>
+											<View style={{ display: "flex" }}>
+												<Text
+													style={{
+														color: "#041A39",
+														fontSize: 13,
+														flex: 1,
+														fontWeight: "bold"
+													}}
+												>
+													Type de test : {item.typeOffer}
+												</Text>
+												<View
+													style={{
+														display: "flex",
+														flexDirection: "row",
+														// justifyContent: "center",
+														alignItems: "center",
+														flex: 1
+													}}
+												>
+													<IonIcon
+														name="ios-people"
+														color="#567294"
+														// marginRight="10"
+														// size="25"
+													/>
+													<Text style={{ color: "#567294", fontSize: 13 }}>
+														{item.availabilities} place(s) restante(s)
+													</Text>
+												</View>
+												<View
+													style={{
+														display: "flex",
+														flexDirection: "row",
+														// justifyContent: "center",
+														alignItems: "center",
+														flex: 1
+													}}
+												>
+													<FeatherIcon
+														name="clock"
+														color="#567294"
+														// style={{ marginRight: 10, size: 25 }}
+													/>
+													<Text style={{ color: "#567294", fontSize: 13 }}>
+														Temps de test : {item.duration}
+													</Text>
+												</View>
+											</View>
+										</View>
+									</TouchableOpacity>
+								</View>
+							);
+						}}
+					/>
+				</ScrollView>
+			</View>
+		);
+	}
+	componentDidMount() {
+		this.getOffers();
+	}
+
 }

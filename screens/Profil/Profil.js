@@ -6,96 +6,17 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
+  Modal
 } from "react-native";
-// import { ImagePicker } from "expo";
-// const { Permissions } = Expo;
-/* var cloudinary = require("cloudinary");
-
-cloudinary.v2.uploader.upload("../../assets/images/profile.jpeg", function(
-  error,
-  result
-) {
-  console.log(result, error);
-}); */
-
-// const API_END_POINT = "https://api.cloudinary.com/v1_1/";
-
-// const CLOUD_NAME = "test-it-cloudinary";
-// const UPLOAD_PRESET_NAME = "yplphiqg";
 
 export default class Profil extends React.Component {
-  /* static navigationOptions = {
-    header: null
-  }; */
-
-  // state = {
-  //   image: null
-  // };
-
-  // upload = (file, filename = null) => {
-  //   return new Promise((resolve, reject) => {
-  //     if (CLOUD_NAME && UPLOAD_PRESET_NAME) {
-  //       if (file) {
-  //         /* console.log(file); */
-  //         const url = `${API_END_POINT}${CLOUD_NAME}/image/upload`;
-  //         const fd = new FormData();
-  //         fd.append("upload_preset", UPLOAD_PRESET_NAME);
-  //         fd.append("file", {
-  //           name: "avatar.jpg",
-  //           uri: file,
-  //           type: "image"
-  //         });
-  //         const config = {
-  //           headers: {
-  //             "Content-Type": "multipart/form-data"
-  //           }
-  //         };
-  //         axios
-  //           .post(url, fd, config)
-  //           .then(res => {
-  //             resolve(res);
-  //           })
-  //           .catch(err => {
-  //             reject(err);
-  //           });
-  //       } else {
-  //         reject("You must send a file path to the function.");
-  //       }
-  //     } else {
-  //       reject(
-  //         "Credentials must not be empty. Please check your configuration."
-  //       );
-  //     }
-  //   });
-  // };
-
-  // _pickImage = async () => {
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     base64: true
-  //   });
-  //   Expo.FileSystem.readAsStringAsync(result).then(avatar => {
-  //     /* console.log(`data:image/jpg;base64,${avatar.base64}`); */
-  //     console.log(avatar);
-  //     /* this.upload(`data:image/jpg;base64,${avatar.base64}`)
-  //       .then(res => console.log("OK", res))
-  //       .catch(err => console.error("ERROR", err)); */
-  //   });
-
-  //   /* if (!result.cancelled) {
-  //     this.setState({ image: result.uri });
-  //   } */
-  // };
-
-  // componentDidMount() {
-  //   Expo.Permissions.getAsync(Permissions.CAMERA_ROLL).then(obj => {
-  //     if (obj.permissions.cameraRoll.status === "undetermined") {
-  //       Expo.Permissions.askAsync(Permissions.CAMERA_ROLL);
-  //     }
-  //   });
-  // }
+  state = {
+    background: "",
+    interests: "",
+    bio: "",
+    button: false
+  };
 
   render() {
     return (
@@ -139,13 +60,16 @@ export default class Profil extends React.Component {
             >
               <TouchableOpacity onPress={this._pickImage}>
                 <Image
-                  style={{
-                    width: 132,
-                    height: 132,
-                    borderRadius: 66,
-                    position: "absolute",
-                    zIndex: 1
-                  }}
+                  style={[
+                    {
+                      width: 132,
+                      height: 132,
+                      borderRadius: 66,
+                      position: "absolute",
+                      zIndex: 1
+                    },
+                    styles.ProfilePictureStyle
+                  ]}
                   source={require("../../assets/images/profile.jpeg")}
                 />
               </TouchableOpacity>
@@ -254,6 +178,7 @@ export default class Profil extends React.Component {
             </View>
           </View>
         </View>
+
         <View
           style={[
             {
@@ -274,6 +199,7 @@ export default class Profil extends React.Component {
               borderBottomWidth: 1
             }}
           >
+            <View style={this.state.button && styles.modalStyle} />
             <Text style={{ marginLeft: 10, marginTop: 13, fontWeight: "bold" }}>
               MON PROFIL TESTEUR
             </Text>
@@ -293,6 +219,27 @@ export default class Profil extends React.Component {
             </Text>
           </View>
           <View>
+            <TouchableOpacity
+              onPress={() => {
+                console.log("cool");
+                this.setState({ button: false });
+                console.log(this.state.button);
+              }}
+            >
+              <View style={this.state.button && styles.buttonStyle}>
+                <Text
+                  style={{
+                    marginRight: 5,
+                    fontSize: 10,
+                    fontWeight: "bold",
+                    color: "white"
+                  }}
+                >
+                  {" "}
+                  Enregistrer les modifications{" "}
+                </Text>
+              </View>
+            </TouchableOpacity>
             <View
               style={{
                 marginLeft: 10,
@@ -304,19 +251,24 @@ export default class Profil extends React.Component {
             </View>
 
             <TextInput
-              secureTextEntry={true}
+              secureTextEntry={false}
+              id="background"
+              name="background"
               placeholder=" École de commerce, Bac +5, Développeur Fullstack "
               style={{
                 borderWidth: 1,
-
                 marginLeft: 10,
                 marginRight: 10,
                 marginTop: 5,
                 backgroundColor: "#FFFFFF",
                 height: 44,
                 borderColor: "#EFEFF4",
-
                 marginBottom: 20
+              }}
+              onChangeText={text => {
+                console.log(text);
+                this.setState({ background: text, button: true });
+                console.log(this.state.button);
               }}
             />
             <View
@@ -331,7 +283,8 @@ export default class Profil extends React.Component {
             </View>
 
             <TextInput
-              secureTextEntry={true}
+              id="interests"
+              name="interests"
               placeholder=" Sculpture, Design, Escalade, Escrime, Cuisine  "
               style={{
                 borderWidth: 1,
@@ -344,6 +297,11 @@ export default class Profil extends React.Component {
                 borderColor: "#EFEFF4",
 
                 marginBottom: 20
+              }}
+              onChangeText={text => {
+                console.log(text);
+                this.setState({ interests: text, button: true });
+                console.log(this.state.interests);
               }}
             />
             <View
@@ -358,7 +316,9 @@ export default class Profil extends React.Component {
             </View>
 
             <TextInput
-              secureTextEntry={true}
+              secureTextEntry={false}
+              id="bio"
+              name="bio"
               placeholder=" Je suis développeur full stack depuis deux ans et j’aime donner mon avis sur des applications mobiles et des sites internets en construction. Je suis passionné d’art et plus particulièrement de sculpture et de design que je pratique de manière régulière. J’ai fait 10 ans d’escalade et 3 ans d’escrime à un niveau national.  "
               style={{
                 borderWidth: 1,
@@ -371,6 +331,11 @@ export default class Profil extends React.Component {
                 borderColor: "#EFEFF4",
 
                 marginBottom: 20
+              }}
+              onChangeText={text => {
+                console.log(text);
+                this.setState({ bio: text, button: true });
+                console.log(this.state.bio);
               }}
             />
           </View>
@@ -389,5 +354,30 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.4,
     shadowRadius: 1
+  },
+  ProfilePictureStyle: {
+    borderWidth: 4,
+    borderColor: "#FFFFFF",
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.4,
+    shadowRadius: 9
+  },
+  buttonStyle: {
+    height: 27,
+    backgroundColor: "#B2025A",
+    alignItems: "flex-end",
+    justifyContent: "center"
+  },
+  modalStyle: {
+    height: 500,
+    width: "100%",
+
+    borderBottomColor: "#EFEFF4",
+    borderBottomWidth: 1,
+    position: "absolute",
+    backgroundColor: "#D0CDCD",
+    opacity: 0.5,
+    top: -500
   }
 });

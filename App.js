@@ -5,6 +5,7 @@ import AppNavigator from "./navigation/AppNavigator";
 import registerForPushNotificationsAsync from "./lib/registerForPushNotificationsAsync";
 
 export default class App extends React.Component {
+
 	state = {
 		isLoadingComplete: false,
 		notification: {}
@@ -72,6 +73,7 @@ export default class App extends React.Component {
 	_handleFinishLoading = () => {
 		this.setState({ isLoadingComplete: true });
 	};
+
 }
 
 const styles = StyleSheet.create({

@@ -262,6 +262,7 @@ export default class Annonces extends React.Component {
 							Toutes les annonces
 						</Text>
 						{/* <TextInput
+
 							ref={el => {
 								this.inputRefs.name = el;
 							}}

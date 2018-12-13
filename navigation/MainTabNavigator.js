@@ -97,8 +97,8 @@ SettingsStack.navigationOptions = {
 };
 
 export default createBottomTabNavigator({
+  Profil,
   Annonces,
   MesOffres,
-  Profil,
   SettingsStack
 });

@@ -11,6 +11,9 @@ import AnnoncesDetailsScreen from "../screens/Annonces/AnnoncesDetails";
 import ProfilScreen from "../screens/Profil/Profil";
 import MesOffresScreen from "../screens/Mesoffres/MesOffres";
 import ReglagesScreen from "../screens/Reglages/Reglages";
+import BankAccountScreen from "../screens/Reglages/Bank";
+import ContactUsScreen from "../screens/Reglages/Contact";
+import IbanFormScreen from "../screens/Reglages/IbanForm";
 
 const Annonces = createStackNavigator({
   Annonces: {
@@ -78,7 +81,10 @@ MesOffres.navigationOptions = {
 };
 
 const SettingsStack = createStackNavigator({
-  Settings: ReglagesScreen
+  Reglages: ReglagesScreen,
+  BankAccount: BankAccountScreen,
+  ContactUs: ContactUsScreen,
+  IbanForm: IbanFormScreen
 });
 
 SettingsStack.navigationOptions = {
@@ -92,9 +98,7 @@ SettingsStack.navigationOptions = {
 
 export default createBottomTabNavigator({
   Annonces,
-  Profil,
   MesOffres,
-
-  // MesOffres,
+  Profil,
   SettingsStack
 });

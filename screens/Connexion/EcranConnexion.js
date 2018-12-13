@@ -2,17 +2,12 @@ import React from "react";
 import axios from "axios";
 import {
   KeyboardAvoidingView,
-  Button,
-  View,
-  ScrollView,
+  AsyncStorage,
   Image,
   Text,
   TouchableOpacity,
   TextInput
 } from "react-native";
-
-// pierre@msn.com
-//  pierre
 
 export default class LogIn extends React.Component {
   static navigationOptions = {
@@ -38,10 +33,18 @@ export default class LogIn extends React.Component {
         password: this.state.password
       })
       .then(response => {
-        console.log("response****", response.data);
+        // console.log("response****", response.data);
+        // AsyncStorage.setItem("userToken", JSON.stringify(response.data));
+        // this.props.navigation.navigate("Main", { _id: response.data._id });
 
         if (response) {
-          navigate("Annonces", { _id: response.data._id });
+          AsyncStorage.setItem(
+            "userInformation",
+            JSON.stringify(response.data),
+            () => {
+              navigate("Main", { _id: response.data._id });
+            }
+          );
         }
       })
       .catch(err => {

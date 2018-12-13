@@ -1,53 +1,64 @@
 import React from "react";
 import axios from "axios";
 import {
-  KeyboardAvoidingView,
-  Button,
-  View,
-  ScrollView,
-  Image,
-  Text,
-  TouchableOpacity,
-  TextInput
+	KeyboardAvoidingView,
+	Image,
+	Text,
+	TouchableOpacity,
+	TextInput
 } from "react-native";
-
+import Icono from "react-native-vector-icons/FontAwesome";
 // pierre@msn.com
 //  pierre
 
 export default class SignUpScreen extends React.Component {
-  static navigationOptions = {
-    title: "Inscription",
-    headerStyle: {
-      backgroundColor: "rgb(239,239,244)"
-    }
-    //header: null //pour enlever le header
-  };
+	static navigationOptions = {
+		title: "Inscription",
+		headerStyle: {
+			backgroundColor: "rgb(239,239,244)"
+		}
+		//header: null //pour enlever le header
+	};
 
   state = {
     email: "jo@msn.com",
     password: "jo"
+    //hasCheckedEmail: false
   };
 
-  handleSubmit = () => {
-    const { navigate } = this.props.navigation;
 
-    axios
-      .post("http://localhost:3000/sign_up", {
-        email: this.state.email,
-        password: this.state.password
-      })
-      .then(response => {
-        if (response) {
-          navigate("StartingProfile", { _id: response.data._id });
-          //J'envoie l'Id sur l'écran startingProfile
-        }
-      })
-      .catch(err => {
-        console.log("erreur", err);
-        alert("Email déjà utilisé. Veuillez donner un email valable.");
-      });
-  };
+	handleSubmit = () => {
+		const { navigate } = this.props.navigation;
 
+		axios
+			.post("http://localhost:3000/sign_up", {
+				email: this.state.email,
+				password: this.state.password
+			})
+			.then(response => {
+				if (response) {
+					navigate("StartingProfile", { _id: response.data._id });
+					//J'envoie l'Id sur l'écran startingProfile
+				}
+			})
+			.catch(err => {
+				console.log("erreur", err);
+				alert("Email déjà utilisé. Veuillez donner un email valable.");
+			});
+	};
+
+
+  // renderIconEmail = () => {
+  //   axios
+  //     .post("http://localhost:3000/freeemail", {
+  //       hasCheckedEmail: this.state.hasCheckedEmail
+  //     })
+  //     .then(response => {
+  //       if (response) {
+  //         return <Icono name="check-circle" size={30} color="green" />;
+  //       }
+  //     });
+  // };
   render() {
     return (
       <KeyboardAvoidingView
@@ -108,6 +119,7 @@ export default class SignUpScreen extends React.Component {
           value={this.state.password}
           onChangeText={text => this.setState({ password: text })}
         />
+        {/* {this.state.hasCheckedEmail  && this.renderIconEmail()} */}
         <TouchableOpacity
           style={{
             height: 40,
@@ -126,4 +138,5 @@ export default class SignUpScreen extends React.Component {
       </KeyboardAvoidingView>
     );
   }
+
 }

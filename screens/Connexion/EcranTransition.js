@@ -2,9 +2,7 @@ import React from "react";
 
 import {
   KeyboardAvoidingView,
-  Button,
-  View,
-  ScrollView,
+  AsyncStorage,
   Image,
   Text,
   TouchableOpacity,
@@ -92,7 +90,7 @@ export default class Transition extends React.Component {
             alignSelf: "center"
           }}
           onPress={() =>
-            navigate("Annonces", {
+            navigate("Main", {
               _id: this.props.navigation.state.params._id
             })
           }
@@ -104,4 +102,12 @@ export default class Transition extends React.Component {
       </KeyboardAvoidingView>
     );
   }
+  // componentDidMount() {
+  // 	AsyncStorage.getItem("userInformation", (err, result) => {
+  // 		const userInformation = JSON.parse(result);
+  // 		console.log(userInformation);
+  // 		this.setState({ userInformation: userInformation });
+  // 		console.log("state", this.state);
+  // 	});
+  // }
 }

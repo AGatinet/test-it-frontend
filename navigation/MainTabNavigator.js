@@ -1,8 +1,8 @@
 import React from "react";
 import { Platform } from "react-native";
 import {
-	createStackNavigator,
-	createBottomTabNavigator
+  createStackNavigator,
+  createBottomTabNavigator
 } from "react-navigation";
 
 import TabBarIcon from "../components/TabBarIcon";
@@ -11,6 +11,9 @@ import AnnoncesDetailsScreen from "../screens/Annonces/AnnoncesDetails";
 import ProfilScreen from "../screens/Profil/Profil";
 import MesOffresScreen from "../screens/Mesoffres/MesOffres";
 import ReglagesScreen from "../screens/Reglages/Reglages";
+import BankAccountScreen from "../screens/Reglages/Bank";
+import ContactUsScreen from "../screens/Reglages/Contact";
+import IbanFormScreen from "../screens/Reglages/IbanForm";
 
 const Annonces = createStackNavigator({
   Annonces: {
@@ -60,11 +63,10 @@ Profil.navigationOptions = {
     inactiveTintColor: "#ACB9CC"
   },
   tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name={"user"} />
-
 };
 
 const MesOffres = createStackNavigator({
-	MesOffres: MesOffresScreen
+  MesOffres: MesOffresScreen
 });
 
 MesOffres.navigationOptions = {
@@ -76,11 +78,13 @@ MesOffres.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={"dollar, usd"} />
   )
-
 };
 
 const SettingsStack = createStackNavigator({
-	Settings: ReglagesScreen
+  Reglages: ReglagesScreen,
+  BankAccount: BankAccountScreen,
+  ContactUs: ContactUsScreen,
+  IbanForm: IbanFormScreen
 });
 
 SettingsStack.navigationOptions = {
@@ -95,8 +99,6 @@ SettingsStack.navigationOptions = {
 export default createBottomTabNavigator({
   Profil,
   Annonces,
-
   MesOffres,
   SettingsStack
-
 });

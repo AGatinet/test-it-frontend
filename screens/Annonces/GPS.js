@@ -16,8 +16,6 @@ class GPS extends React.Component {
   render() {
     return (
       <View>
-        {/* <Text>Latitude : {this.props.navigation.state.params.offer._id}</Text> */}
-        {/* <Text>{this.props.navigation.state.params.Offer_id}</Text> */}
         <View style={styles.mapViewContainer}>
           <MapView
             style={styles.MapView}

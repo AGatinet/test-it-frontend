@@ -8,7 +8,8 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  FlatList
+  FlatList,
+  AsyncStorage
 } from "react-native";
 import OfferLabel from "../../components/OfferLabel";
 

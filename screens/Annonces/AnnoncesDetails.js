@@ -14,7 +14,8 @@ import {
   ScrollView,
   TouchableOpacity,
   FlatList,
-  AlertIOS
+  AlertIOS,
+  AsyncStorage
 } from "react-native";
 
 class Offer extends React.Component {

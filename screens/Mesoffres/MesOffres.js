@@ -1,5 +1,16 @@
 import React from "react";
-import { Image, View, Text, StyleSheet, ScrollView } from "react-native";
+import IonIcon from "react-native-vector-icons/Ionicons";
+import axios from "axios";
+import {
+  Image,
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  FlatList
+} from "react-native";
+import OfferLabel from "../../components/OfferLabel";
 
 export default class MesOffres extends React.Component {
   // Barre de navigation
@@ -16,10 +27,64 @@ export default class MesOffres extends React.Component {
   };
   // Définition des états
   state = {
-    BarrePosition: "BarrePosition0"
+    user_id: "",
+    IsEmpty: true,
+    OfferType: "favorites",
+    Datas: ""
+  };
+  // Requêtes axios
+  getDatas = () => {
+    axios
+      .get(
+        "http://localhost:3000/" +
+          this.state.OfferType +
+          "/" +
+          this.state.user_id
+      )
+      .then(response => {
+        this.setState(
+          {
+            Datas: response.data
+          },
+          () => {
+            if (response.data.length === 0) {
+              this.setState({
+                IsEmpty: true
+              });
+            } else {
+              this.setState({
+                IsEmpty: false
+              });
+            }
+          }
+        );
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   };
   // Render
   render() {
+    const MyDatas = [];
+    for (let i = 0; i < this.state.Datas.length; i++) {
+      MyDatas.push(
+        <OfferLabel
+          id={this.state.Datas[i]._id}
+          title={this.state.Datas[i].offerName}
+          picture={this.state.Datas[i].picture}
+          availabilities={this.state.Datas[i].availabilities}
+          price={this.state.Datas[i].price}
+          typeOffer={this.state.Datas[i].typeOffer}
+          duration={this.state.Datas[i].duration}
+          picture={this.state.Datas[i].picture}
+          companyName={this.state.Datas[i].company.companyAccount.companyName}
+          logoCompany={
+            this.state.Datas[i].company.companyAccount.companyLogo[0]
+          }
+          navigation={this.props.navigation}
+        />
+      );
+    }
     return (
       <View>
         <View style={styles.navContainer}>
@@ -27,9 +92,14 @@ export default class MesOffres extends React.Component {
             <Text
               style={styles.nav}
               onPress={() => {
-                this.setState({
-                  BarrePosition: "BarrePosition1"
-                });
+                this.setState(
+                  {
+                    OfferType: "favorites"
+                  },
+                  () => {
+                    this.getDatas();
+                  }
+                );
               }}
             >
               FAVORIS
@@ -37,9 +107,14 @@ export default class MesOffres extends React.Component {
             <Text
               style={styles.nav}
               onPress={() => {
-                this.setState({
-                  BarrePosition: "BarrePosition2"
-                });
+                this.setState(
+                  {
+                    OfferType: "pendingValidation"
+                  },
+                  () => {
+                    this.getDatas();
+                  }
+                );
               }}
             >
               EN ATTENTE
@@ -47,9 +122,14 @@ export default class MesOffres extends React.Component {
             <Text
               style={styles.nav}
               onPress={() => {
-                this.setState({
-                  BarrePosition: "BarrePosition3"
-                });
+                this.setState(
+                  {
+                    OfferType: "pending"
+                  },
+                  () => {
+                    this.getDatas();
+                  }
+                );
               }}
             >
               À VENIR
@@ -57,19 +137,63 @@ export default class MesOffres extends React.Component {
             <Text
               style={styles.navHistorique}
               onPress={() => {
-                this.setState({
-                  BarrePosition: "BarrePosition4"
-                });
+                this.setState(
+                  {
+                    OfferType: "history"
+                  },
+                  () => {
+                    this.getDatas();
+                  }
+                );
               }}
             >
               HISTORIQUE
             </Text>
           </View>
-          <View style={styles[this.state.BarrePosition]} />
+          <View style={styles[this.state.OfferType]} />
         </View>
-        <ScrollView style={styles.background} />
+        {/* IF EMPTY */}
+        <View
+          style={[
+            this.state.IsEmpty === true
+              ? styles.ifEmptyContainerOn
+              : styles.ifEmptyContainerOff
+          ]}
+        >
+          <View>
+            <Text style={styles.ifEmptyText}>
+              Vous n’avez pas encore d’offre dans cette section
+            </Text>
+          </View>
+          <View>
+            <TouchableOpacity
+              style={styles.ifEmptyButton}
+              onPress={() => {
+                this.props.navigation.navigate("Annonces", {
+                  // id: item._id
+                });
+              }}
+            >
+              <Text style={styles.ifEmptyTextButton}>Voir les annonces </Text>
+              <IonIcon name="ios-arrow-dropright" style={styles.ifEmptyIcon} />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <ScrollView style={styles.background}>
+          <View>{MyDatas}</View>
+        </ScrollView>
       </View>
     );
+  }
+  componentDidMount() {
+    this.getDatas();
+    // Récupérer l'id de l'utilisateur
+    AsyncStorage.getItem("userInformation").then(value => {
+      const userInformation = JSON.parse(value);
+      this.setState({
+        user_id: userInformation._id
+      });
+    });
   }
 }
 
@@ -103,38 +227,79 @@ var styles = StyleSheet.create({
     height: 43,
     paddingTop: 15
   },
-  BarrePosition0: {
-    height: 0,
-    width: "25%",
-    backgroundColor: "white"
-  },
-  BarrePosition1: {
+  favorites: {
     height: 2,
     width: "25%",
     backgroundColor: "white",
     marginLeft: "0%"
   },
-  BarrePosition2: {
+  pendingValidation: {
     height: 2,
     width: "25%",
     backgroundColor: "white",
     marginLeft: "25%"
   },
-  BarrePosition3: {
+  pending: {
     height: 2,
     width: "25%",
     backgroundColor: "white",
     marginLeft: "50%"
   },
-  BarrePosition4: {
+  history: {
     height: 2,
     width: "25%",
     backgroundColor: "white",
     marginLeft: "75%"
   },
   background: {
-    backgroundColor: "#EFEFF4",
-    flex: 1,
-    height: 100
+    height: "100%"
+  },
+  ifEmptyContainerOn: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "90%",
+    marginLeft: "5%",
+    marginTop: 70,
+    height: 150
+  },
+  ifEmptyContainerOff: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "90%",
+    marginLeft: "5%",
+    marginTop: 5,
+    height: 0
+  },
+  ifEmptyText: {
+    fontSize: 17,
+    lineHeight: 25,
+    textAlign: "center",
+    fontWeight: "bold",
+    color: "#536D91"
+  },
+  ifEmptyButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    borderRadius: "50%",
+    width: 190,
+    height: 42,
+    color: "white",
+    backgroundColor: "#041A39",
+    marginTop: 35
+  },
+  ifEmptyTextButton: {
+    textAlign: "center",
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "white"
+  },
+  ifEmptyIcon: {
+    color: "white",
+    fontSize: 30,
+    marginLeft: 5,
+    marginTop: 3
   }
 });

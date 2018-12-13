@@ -451,7 +451,7 @@ const styles = StyleSheet.create({
   ArrayContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "start",
+    alignItems: "center",
     marginLeft: "auto",
     marginRight: "auto",
     marginLeft: 15
@@ -471,7 +471,7 @@ const styles = StyleSheet.create({
     fontSize: 13
   },
   registerContainer: {
-    justifyContent: "start",
+    justifyContent: "center",
     alignItems: "center",
     paddingTop: 15,
     height: 200,
@@ -484,7 +484,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: 180,
     height: 40,
-    borderRadius: "50%",
+    borderRadius: 60,
     backgroundColor: "#B2025A",
     shadowOffset: { width: 1, height: 1 },
     shadowColor: "lightgray",
@@ -496,7 +496,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: 180,
     height: 40,
-    borderRadius: "50%",
+    borderRadius: 60,
     backgroundColor: "#567294",
     shadowOffset: { width: 1, height: 1 },
     shadowColor: "lightgray",
@@ -531,9 +531,9 @@ const styles = StyleSheet.create({
   mapButton: {
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: "3%",
+    borderRadius: 3,
     borderColor: "#B2025A",
-    marginleft: 15,
+    marginLeft: 15,
     marginTop: 7,
     borderWidth: 1.2,
     height: 30,
@@ -594,7 +594,6 @@ const styles = StyleSheet.create({
   },
   end: {
     height: 50
-
   }
 });
 

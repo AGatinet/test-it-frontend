@@ -114,7 +114,6 @@ var styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     height: 53,
-    border: "solid",
     borderColor: "gray",
     borderWidth: 0.5,
     borderColor: "#CCCCCC",

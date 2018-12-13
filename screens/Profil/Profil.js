@@ -7,7 +7,8 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Button
+  Button,
+  AsyncStorage
 } from "react-native";
 import { Permissions, ImagePicker } from "expo";
 
@@ -20,12 +21,20 @@ export default class Profil extends React.Component {
     interests: "",
     bio: "",
     button: false,
-    image: null
+    image: null,
+    firstName: "",
+    lastName: "",
+    userInformation: ""
   };
+
   componentDidMount() {
     this.checkPermission(Permissions.CAMERA_ROLL);
+    AsyncStorage.getItem("userInformation", (err, result) => {
+      const userInformation = JSON.parse(result);
+      this.setState({ userInformation: userInformation.account });
+      console.log(this.state.userInformation);
+    });
   }
-
   askPermission(type) {
     Expo.Permissions.askAsync(type);
   }
@@ -143,7 +152,7 @@ export default class Profil extends React.Component {
                       source={{ uri: this.state.image }}
                     />
                   ) : (
-                    <Text>Pas d'image</Text>
+                    <Text />
                   )}
                   {this.state.image ? (
                     <Button
@@ -151,10 +160,38 @@ export default class Profil extends React.Component {
                       title="Supprimer l'image"
                     />
                   ) : (
-                    <Button
-                      onPress={this.pickImage}
-                      title="Choisir une image"
-                    />
+                    // <Button
+                    //   onPress={this.pickImage}
+                    //   title="Choisir une image"
+                    // />
+                    <View
+                      style={{
+                        height: 132,
+                        width: 132,
+                        position: "absolute",
+                        overflow: "hidden",
+                        top: 0
+                      }}
+                    >
+                      <View
+                        style={{
+                          width: 132,
+                          height: 132,
+                          backgroundColor: "grey",
+                          borderRadius: 66,
+                          justifyContent: "center",
+                          alignItems: "center"
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 10
+                          }}
+                        >
+                          Choisir une image
+                        </Text>
+                      </View>
+                    </View>
                   )}
                 </View>
               </TouchableOpacity>
@@ -169,7 +206,8 @@ export default class Profil extends React.Component {
                 marginBottom: 3
               }}
             >
-              Julie Chabannon
+              {this.state.userInformation.firstName}{" "}
+              {this.state.userInformation.lastName}
             </Text>
             <Text
               style={{

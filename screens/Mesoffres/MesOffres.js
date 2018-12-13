@@ -187,13 +187,17 @@ export default class MesOffres extends React.Component {
     );
   }
   componentDidMount() {
-    this.getDatas();
     // Récupérer l'id de l'utilisateur
     AsyncStorage.getItem("userInformation").then(value => {
       const userInformation = JSON.parse(value);
-      this.setState({
-        user_id: userInformation._id
-      });
+      this.setState(
+        {
+          user_id: userInformation._id
+        },
+        () => {
+          this.getDatas();
+        }
+      );
     });
   }
 }

@@ -292,61 +292,68 @@ class Offer extends React.Component {
     // Récupérer l'id de l'utilisateur
     AsyncStorage.getItem("userInformation").then(value => {
       const userInformation = JSON.parse(value);
-      this.setState({
-        user_id: userInformation._id
-      });
-    });
-    // Charger l'annonce et vérifier l'inscription de l'user
-    axios
-      .get(
-        "http://localhost:3000/offer/" + this.props.navigation.state.params.id
-      )
-      .then(response => {
-        this.setState(
-          {
-            offer: response.data
-          },
-          () => {
-            this.state.offer.listTesters.indexOf(this.state.user_id) === -1
-              ? this.setState({
-                  register: false
-                })
-              : this.setState({
-                  register: true
-                });
-            this.setState({
-              companyName: this.state.offer.company.companyAccount.companyName,
-              adresse: this.state.offer.adress[0].streetName,
-              postalCode: this.state.offer.adress[0].zipcode,
-              city: this.state.offer.adress[0].city,
-              country: this.state.offer.adress[0].country,
-              latitude: this.state.offer.adress[0].latitude,
-              longitude: this.state.offer.adress[0].longitude
+      this.setState(
+        {
+          user_id: userInformation._id
+        },
+        () => {
+          // Charger l'annonce et vérifier l'inscription de l'user
+          axios
+            .get(
+              "http://localhost:3000/offer/" +
+                this.props.navigation.state.params.id
+            )
+            .then(response => {
+              this.setState(
+                {
+                  offer: response.data
+                },
+                () => {
+                  this.state.offer.listTesters.indexOf(this.state.user_id) ===
+                  -1
+                    ? this.setState({
+                        register: false
+                      })
+                    : this.setState({
+                        register: true
+                      });
+                  this.setState({
+                    companyName: this.state.offer.company.companyAccount
+                      .companyName,
+                    adresse: this.state.offer.adress[0].streetName,
+                    postalCode: this.state.offer.adress[0].zipcode,
+                    city: this.state.offer.adress[0].city,
+                    country: this.state.offer.adress[0].country,
+                    latitude: this.state.offer.adress[0].latitude,
+                    longitude: this.state.offer.adress[0].longitude
+                  });
+                }
+              );
             });
-          }
-        );
-      });
-    // Charger l'utilisateur et vérifier les favoris
-    axios
-      .get("http://localhost:3000/checkfavorites/" + this.state.user_id)
-      .then(response => {
-        this.setState(
-          {
-            checkfavorites: response.data
-          },
-          () => {
-            this.state.checkfavorites.indexOf(
-              this.props.navigation.state.params.id
-            ) === -1
-              ? this.setState({
-                  favorites: false
-                })
-              : this.setState({
-                  favorites: true
-                });
-          }
-        );
-      });
+          // Charger l'utilisateur et vérifier les favoris
+          axios
+            .get("http://localhost:3000/checkfavorites/" + this.state.user_id)
+            .then(response => {
+              this.setState(
+                {
+                  checkfavorites: response.data
+                },
+                () => {
+                  this.state.checkfavorites.indexOf(
+                    this.props.navigation.state.params.id
+                  ) === -1
+                    ? this.setState({
+                        favorites: false
+                      })
+                    : this.setState({
+                        favorites: true
+                      });
+                }
+              );
+            });
+        }
+      );
+    });
   }
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress);

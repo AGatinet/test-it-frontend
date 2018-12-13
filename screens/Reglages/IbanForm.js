@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Image,
+  AlertIOS,
   TextInput
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -20,7 +21,7 @@ class IbanForm extends React.Component {
   ribSaved = () => {
     console.log("youpi", this.props);
     const { navigate } = this.props.navigation;
-    alert("IBAN enregistré avec succes");
+    AlertIOS.alert("", "IBAN enregistré avec succes");
   };
 
   render() {

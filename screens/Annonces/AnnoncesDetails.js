@@ -1,25 +1,30 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, AsyncStorage } from "react-native";
 
 class Offer extends React.Component {
-	render() {
-		// console.log(this.props.navigation.state.params.id);
-		return (
-			<View style={styles.container}>
-				<Text>
-					This is the props id : {this.props.navigation.state.params.id}
-				</Text>
-			</View>
-		);
-	}
+  render() {
+    AsyncStorage.getItem("userInformation").then(value => {
+      const userInformation = JSON.parse(value);
+      console.log("userInformation._id:", userInformation._id);
+    });
+
+    // console.log(this.props.navigation.state.params.id);
+    return (
+      <View style={styles.container}>
+        <Text>
+          This is the props id : {this.props.navigation.state.params.id}
+        </Text>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		alignItems: "center",
-		justifyContent: "center"
-	}
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center"
+  }
 });
 
 export default Offer;

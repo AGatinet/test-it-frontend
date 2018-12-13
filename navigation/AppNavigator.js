@@ -10,11 +10,4 @@ export default createSwitchNavigator({
   AnnoncesDetails: AnnoncesDetails,
   Auth: AuthStack,
   GPS: GPS
-
-export default createSwitchNavigator({
-
-	Auth: AuthStack,
-	Main: MainTabNavigator,
-	AnnoncesDetails: AnnoncesDetails
-
 });

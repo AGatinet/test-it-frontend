@@ -288,7 +288,7 @@ var styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
-    borderRadius: "50%",
+    borderRadius: 50,
     width: 190,
     height: 42,
     color: "white",

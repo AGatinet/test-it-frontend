@@ -1,71 +1,111 @@
 import React from "react";
 import axios from "axios";
 import {
-  KeyboardAvoidingView,
-  AsyncStorage,
-  Image,
-  Text,
-  View,
-  Button,
-  TouchableOpacity,
-  TextInput
+
+	KeyboardAvoidingView,
+	AsyncStorage,
+	Image,
+	Text,
+	TouchableOpacity,
+	TextInput
+
 } from "react-native";
+import { Permissions, Notifications } from "expo";
 
 export default class LogIn extends React.Component {
-  static navigationOptions = {
-    title: "Connexion",
-    headerStyle: {
-      backgroundColor: "rgb(239,239,244)"
-    }
-    //header: null //pour enlever le header
-  };
+	static navigationOptions = {
+		title: "Connexion",
+		headerStyle: {
+			backgroundColor: "rgb(239,239,244)"
+		}
+		//header: null //pour enlever le header
+	};
 
-  state = {
-    email: "Jp@msn.com",
-    password: "jp",
-    isAuthenticated: false
-  };
+
+	state = {
+		email: "Pd@msn.com",
+		password: "pd",
+		isAuthenticated: false,
+		tokenNotifications: ""
+	};
+
+	async registerForPushNotificationsAsync() {
+		const { status: existingStatus } = await Permissions.getAsync(
+			Permissions.NOTIFICATIONS
+		);
+		let finalStatus = existingStatus;
+
+		// only ask if permissions have not already been determined, because
+		// iOS won't necessarily prompt the user a second time.
+		if (existingStatus !== "granted") {
+			// Android remote notification permissions are granted during the app
+			// install, so this will only ask on iOS
+			const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+			finalStatus = status;
+		}
+
+		// Stop here if the user did not grant permissions
+		if (finalStatus !== "granted") {
+			return;
+		}
+
   forgetSubmit = () => {
     const { navigate } = this.props.navigation;
     navigate("ForgotPassword");
   };
-  handleSubmit = () => {
-    const { navigate } = this.props.navigation;
 
-    axios
-      .post("http://localhost:3000/log_in", {
-        email: this.state.email,
-        password: this.state.password
-      })
-      .then(response => {
-        // console.log("response****", response.data);
-        // AsyncStorage.setItem("userToken", JSON.stringify(response.data));
-        // this.props.navigation.navigate("Main", { _id: response.data._id });
+		// Get the token that uniquely identifies this device
+		let token = await Notifications.getExpoPushTokenAsync();
+		this.setState(
+			{
+				tokenNotifications: token
+			},
+			() => {
+				console.log(this.state.tokenNotifications);
+			}
+		);
+	}
 
-        if (response) {
-          AsyncStorage.setItem(
-            "userInformation",
-            JSON.stringify(response.data),
-            () => {
-              navigate("Main", { _id: response.data._id });
-            }
-          );
-        }
-      })
-      .catch(err => {
-        console.log("erreur", err);
-        alert("Mauvais identifiant ou mauvais mot de passe");
-      });
-  };
 
-  render() {
-    return (
-      <KeyboardAvoidingView
-        behavior="padding"
-        enabled
-        style={{
-          backgroundColor: "rgb(239,239,244)",
-          alignItems: "center",
+	handleSubmit = () => {
+		const { navigate } = this.props.navigation;
+		axios
+			.post("http://192.168.86.60:3000/log_in", {
+				tokenNotifications: this.state.tokenNotifications,
+				email: this.state.email,
+				password: this.state.password
+			})
+			.then(response => {
+				// console.log("response****", response.data);
+
+				if (response) {
+					AsyncStorage.setItem(
+						"userInformation",
+						JSON.stringify(response.data),
+						() => {
+							navigate("Main");
+						}
+					);
+				}
+			})
+			.catch(err => {
+				console.log("erreur", err);
+				alert("Mauvais identifiant ou mauvais mot de passe");
+			});
+	};
+	componentDidMount() {
+		console.log("did mount");
+		this.registerForPushNotificationsAsync();
+	}
+
+	render() {
+		return (
+			<KeyboardAvoidingView
+				behavior="padding"
+				enabled
+				style={{
+					backgroundColor: "rgb(239,239,244)",
+					alignItems: "center",
 
           flex: 1,
           justifyContent: "center"
@@ -144,4 +184,5 @@ export default class LogIn extends React.Component {
       </KeyboardAvoidingView>
     );
   }
+
 }

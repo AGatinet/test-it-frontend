@@ -2,41 +2,31 @@ import React from "react";
 import axios from "axios";
 import {
   KeyboardAvoidingView,
+  AsyncStorage,
   Image,
   Text,
   TouchableOpacity,
-  TextInput
+  TextInput,
+  AlertIOS
 } from "react-native";
-import Icono from "react-native-vector-icons/FontAwesome";
-// pierre@msn.com
-//  pierre
-
-export default class SignUpScreen extends React.Component {
-  static navigationOptions = {
-    title: "Inscription",
-    headerStyle: {
-      backgroundColor: "rgb(239,239,244)"
-    }
-    //header: null //pour enlever le header
-  };
-
+export default class ForgotPassword extends React.Component {
   state = {
-    email: "jo@msn.com",
-    password: "jo"
-    //hasCheckedEmail: false
+    email: ""
   };
-
   handleSubmit = () => {
     const { navigate } = this.props.navigation;
 
     axios
-      .post("http://localhost:3000/sign_up", {
-        email: this.state.email,
-        password: this.state.password
+      .post("http://localhost:3000/log_in/forgot_password", {
+        email: this.state.email
       })
       .then(response => {
         if (response) {
-          navigate("StartingProfile", { _id: response.data._id });
+          AlertIOS.alert(
+            "",
+            "Votre nouveau mot de passe vous a été envoyé par mail."
+          );
+          navigate("LogIn", { name: "Connexion" });
           //J'envoie l'Id sur l'écran startingProfile
         }
       })
@@ -46,18 +36,8 @@ export default class SignUpScreen extends React.Component {
       });
   };
 
-  // renderIconEmail = () => {
-  //   axios
-  //     .post("http://localhost:3000/freeemail", {
-  //       hasCheckedEmail: this.state.hasCheckedEmail
-  //     })
-  //     .then(response => {
-  //       if (response) {
-  //         return <Icono name="check-circle" size={30} color="green" />;
-  //       }
-  //     });
-  // };
   render() {
+    console.log(this.state.email);
     return (
       <KeyboardAvoidingView
         behavior="padding"
@@ -65,9 +45,7 @@ export default class SignUpScreen extends React.Component {
         style={{
           backgroundColor: "rgb(239,239,244)",
           alignItems: "center",
-
-          flex: 1,
-          justifyContent: "center"
+          flex: 1
         }}
       >
         <Image
@@ -80,6 +58,17 @@ export default class SignUpScreen extends React.Component {
           }}
           source={require("../../assets/images/testit-logo.png")}
         />
+
+        <Text
+          style={{
+            fontSize: 15,
+            color: "black",
+            alignSelf: "center",
+            marginTop: 30
+          }}
+        >
+          Veuillez entrer votre email :
+        </Text>
         <TextInput
           style={{
             fontSize: 20,
@@ -93,46 +82,32 @@ export default class SignUpScreen extends React.Component {
           }}
           placeholder="email" //arno@airbnb-api.com
           placeholderTextColor="lightgrey"
-          type="text"
+          type="email-address"
           autoCapitalize="none"
           name="email"
           value={this.state.email}
           onChangeText={email => this.setState({ email })}
         />
-        <TextInput
-          style={{
-            fontSize: 20,
-            color: "black",
-            height: 50,
-            width: 200,
-            marginTop: 30,
-            borderBottomWidth: 1,
-            borderBottomColor: "rgb(103,114,129)",
-            paddingBottom: 5
-          }}
-          placeholder="........"
-          placeholderTextColor="lightgrey"
-          secureTextEntry
-          type="text"
-          name="password"
-          value={this.state.password}
-          onChangeText={text => this.setState({ password: text })}
-        />
-        {/* {this.state.hasCheckedEmail  && this.renderIconEmail()} */}
         <TouchableOpacity
           style={{
-            height: 40,
-            width: 190,
-            borderRadius: 20,
-            backgroundColor: "white",
+            height: 50,
+            width: 260,
+            borderRadius: 40,
+            backgroundColor: "#0DA5BA",
             alignItems: "center",
             justifyContent: "center",
             marginTop: 50,
-            alignSelf: "center"
+            alignSelf: "center",
+            borderColor: "#ddd",
+            shadowColor: "#000000",
+            shadowOffset: { width: 3, height: 3 },
+            shadowOpacity: 0.4
           }}
           onPress={this.handleSubmit}
         >
-          <Text>CRÉER MON COMPTE</Text>
+          <Text style={{ color: "white", fontWeight: "900" }}>
+            Confirmer votre demande
+          </Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     );

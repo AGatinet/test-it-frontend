@@ -6,6 +6,7 @@ import {
   View,
   Text,
   StyleSheet,
+  ScrollView,
   TouchableOpacity,
   Image,
   AsyncStorage
@@ -122,11 +123,12 @@ export default class FirstMainScreen extends React.Component {
             style={{
               textAlign: "center",
               marginTop: 10,
-              fontSize: 40,
-              borderColor: "grey",
-              shadowColor: "grey",
+              fontSize: 30,
+              padding: 20,
+              color: "#444444",
               shadowOffset: { width: 2, height: 2 },
-              shadowOpacity: 0.6
+              shadowOpacity: 0.6,
+              fontFamily: "Just"
             }}
           >
             TEST IT

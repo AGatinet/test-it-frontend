@@ -5,6 +5,8 @@ import {
   AsyncStorage,
   Image,
   Text,
+  View,
+  Button,
   TouchableOpacity,
   TextInput
 } from "react-native";
@@ -19,11 +21,14 @@ export default class LogIn extends React.Component {
   };
 
   state = {
-    email: "Jj@msn.com",
-    password: "jj",
+    email: "Jp@msn.com",
+    password: "jp",
     isAuthenticated: false
   };
-
+  forgetSubmit = () => {
+    const { navigate } = this.props.navigation;
+    navigate("ForgotPassword");
+  };
   handleSubmit = () => {
     const { navigate } = this.props.navigation;
 
@@ -89,7 +94,8 @@ export default class LogIn extends React.Component {
           }}
           placeholder="email" //arno@airbnb-api.com
           placeholderTextColor="lightgrey"
-          type="text"
+          type="email-address"
+          autoCapitalize="none"
           name="email"
           value={this.state.email}
           onChangeText={email => this.setState({ email })}
@@ -128,6 +134,13 @@ export default class LogIn extends React.Component {
         >
           <Text>SE CONNECTER</Text>
         </TouchableOpacity>
+        <View style={{ marginTop: 15 }}>
+          <Button
+            title="Mot de passe oublié ?"
+            color="#841584"
+            onPress={this.forgetSubmit}
+          />
+        </View>
       </KeyboardAvoidingView>
     );
   }

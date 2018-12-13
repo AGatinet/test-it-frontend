@@ -594,6 +594,7 @@ const styles = StyleSheet.create({
   },
   end: {
     height: 50
+
   }
 });
 

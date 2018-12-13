@@ -6,19 +6,33 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image
+  Image,
+  AsyncStorage
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import IconEntypo from "react-native-vector-icons/Entypo";
+import IconIonicons from "react-native-vector-icons/Ionicons";
 
-export default class SettingsScreen extends React.Component {
+export default class ReglagesScreen extends React.Component {
   static navigationOptions = {
     title: "Paramètres"
   };
 
   logOut = () => {
+    AsyncStorage.removeItem("userInformation").then(() => {
+      this.props.navigation.navigate("Auth");
+    });
+  };
+
+  getContact = () => {
     console.log("youpi", this.props);
     const { navigate } = this.props.navigation;
-    navigate("Auth");
+    navigate("ContactUs");
+  };
+  getBank = () => {
+    console.log("youpi", this.props);
+    const { navigate } = this.props.navigation;
+    navigate("BankAccount");
   };
 
   render() {
@@ -48,11 +62,12 @@ export default class SettingsScreen extends React.Component {
 
             backgroundColor: "white"
           }}
+          onPress={this.getBank}
         >
           <View
             style={{ marginLeft: 20, marginRight: 40, paddingVertical: 15 }}
           >
-            <Icon name="power-off" size={30} color="red" />
+            <IconEntypo name="credit-card" size={30} color="#428CC4" />
           </View>
           <View style={{ marginRight: 50 }}>
             <Text>MES DONNÉES BANCAIRES</Text>
@@ -72,11 +87,12 @@ export default class SettingsScreen extends React.Component {
 
             backgroundColor: "white"
           }}
+          onPress={this.getContact}
         >
           <View
             style={{ marginLeft: 20, marginRight: 40, paddingVertical: 15 }}
           >
-            <Icon name="power-off" size={30} color="red" />
+            <IconIonicons name="ios-mail" size={30} color="#F7F1D9" />
           </View>
           <View style={{ marginRight: 50 }}>
             <Text>NOUS CONTACTER</Text>

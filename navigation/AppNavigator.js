@@ -6,8 +6,10 @@ import AnnoncesDetails from "../screens/Annonces/AnnoncesDetails";
 import GPS from "../screens/Annonces/GPS";
 
 export default createSwitchNavigator({
-  Auth: AuthStack,
   Main: MainTabNavigator,
+
+  Auth: AuthStack,
   AnnoncesDetails: AnnoncesDetails,
   GPS: GPS
+
 });

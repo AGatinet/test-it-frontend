@@ -71,6 +71,7 @@ export default class MesOffres extends React.Component {
       MyDatas.push(
         <OfferLabel
           id={this.state.Datas[i]._id}
+          key={this.state.Datas[i]._id}
           title={this.state.Datas[i].offerName}
           picture={this.state.Datas[i].picture}
           availabilities={this.state.Datas[i].availabilities}

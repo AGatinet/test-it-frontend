@@ -168,9 +168,7 @@ class Offer extends React.Component {
               <IonIcon name="ios-calendar" style={styles.icones} />
               <Text style={styles.OfferSecondTitle}>
                 Date :{" "}
-                {moment(Date(this.state.offer.deadlineTest)).format(
-                  "DD-MM-YYYY"
-                )}
+                {moment(this.state.offer.deadlineTest).format("DD-MM-YYYY")}
               </Text>
             </View>
             {this.state.latitude === "" ? (
@@ -579,7 +577,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     position: "relative",
-    zIdex: 0,
     opacity: 1
   },
   mapCache: {

@@ -127,8 +127,7 @@ export default class FirstMainScreen extends React.Component {
               padding: 20,
               color: "#444444",
               shadowOffset: { width: 2, height: 2 },
-              shadowOpacity: 0.6,
-              fontFamily: "Just"
+              shadowOpacity: 0.6
             }}
           >
             TEST IT

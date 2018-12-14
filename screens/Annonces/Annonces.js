@@ -75,8 +75,9 @@ export default class Annonces extends React.Component {
       // console.log(age, userInformation);
       axios
         .get(
+          // pour pouvoir se connecter avec son telephone portable il faut mettre l'adresse ip a la place de localhost:
+          //"http://192.168.86.60:3000/home/with-count?age=" +
           "http://localhost:3000/home/with-count?age=" +
-            // "http://192.168.86.60:3000/home/with-count?age=" +
             age +
             "&genderTarget=" +
             userInformation.account.sex,

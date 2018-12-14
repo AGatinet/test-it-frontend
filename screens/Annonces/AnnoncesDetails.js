@@ -16,16 +16,20 @@ import {
   TouchableOpacity,
   FlatList,
   AlertIOS,
-  AsyncStorage
+  AsyncStorage,
+  Linking
 } from "react-native";
 
 class Offer extends React.Component {
   state = {
     user_id: "",
     offer: "",
-    checkfavorites: "",
-    register: false,
     favorites: false,
+    checkfavorites: "",
+    history: false,
+    checkhistory: "",
+    register: false,
+    participation: false,
     companyName: "",
     logoCompany: "",
     adresse: "",
@@ -73,6 +77,33 @@ class Offer extends React.Component {
     this.setState({
       favorites: !this.state.favorites
     });
+  };
+  getToHistory = () => {
+    axios
+      .post("http://localhost:3000/participation", {
+        Offer_id: this.props.navigation.state.params.id,
+        User_id: this.state.user_id
+      })
+      .then(response => {
+        console.log("", response.data);
+      })
+      .catch(e => {
+        console.error("error", e);
+      });
+    this.setState(
+      {
+        participation: true
+      },
+      () => {
+        this.props.navigation.navigate(
+          this.props.navigation.state.params.pageName.toString(),
+          {
+            id: this.props.id,
+            navigation: this.props.navigation
+          }
+        );
+      }
+    );
   };
   share = () => {
     Share.share(
@@ -148,16 +179,20 @@ class Offer extends React.Component {
               <ImageBackground
                 style={styles.Image}
                 source={{
-                  uri: this.state.picture
+                  uri: this.state.offer.picture
                 }}
               />
             )}
           </View>
           <View style={styles.title}>
-            <Text style={styles.companyName}>{this.state.companyName}</Text>
+            <Text style={styles.companyName} numberOfLines={1}>
+              {this.state.companyName}
+            </Text>
             <Text style={styles.titlePrice}>{this.state.offer.price} €</Text>
           </View>
-          <Text style={styles.titleOffer}>{this.state.offer.offerName}</Text>
+          <Text style={styles.titleOffer} numberOfLines={1}>
+            {this.state.offer.offerName}
+          </Text>
           {/* Ligne de séparation */}
           <View style={styles.separationLine} />
           {/* =================== */}
@@ -168,9 +203,7 @@ class Offer extends React.Component {
               <IonIcon name="ios-calendar" style={styles.icones} />
               <Text style={styles.OfferSecondTitle}>
                 Date :{" "}
-                {moment(Date(this.state.offer.deadlineTest)).format(
-                  "DD-MM-YYYY"
-                )}
+                {moment(this.state.offer.deadlineTest).format("DD-MM-YYYY")}
               </Text>
             </View>
             {this.state.latitude === "" ? (
@@ -294,49 +327,80 @@ class Offer extends React.Component {
           </View>
           <View style={styles.end} />
         </ScrollView>
-        <View style={styles.registerContainer}>
-          {this.state.register === true ? (
-            <TouchableOpacity
-              style={styles.registerButtonOff}
-              onPress={() => {
-                this.register();
-              }}
-            >
-              <Text style={styles.textButton}>SE DÉINSCRIRE</Text>
-              <IonIcon name="ios-close" style={styles.iconClose} />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={styles.registerButtonOn}
-              onPress={() => {
-                // Cas des sondages internet
-                if (this.state.offer.typeOffer === "Sondage Internet") {
-                  return AlertIOS.alert(
-                    this.state.companyName,
-                    "Participer immédiatement au sondage ?",
-                    [
-                      { text: "Oui", onPress: () => console.log("OK Pressed") },
-                      {
-                        text: "Non",
-                        onPress: () => {
-                          console.log("Cancel Pressed");
-                        },
-                        style: "cancel"
-                      }
-                    ],
-                    { cancelable: false }
-                  );
-                } else {
-                  // Cas des tests produits
+        {/* REGISTER  -  REGISTER  -  REGISTER  -  REGISTER */}
+        {this.state.history === false ? (
+          <View style={styles.registerContainer}>
+            {this.state.register === true ? (
+              <TouchableOpacity
+                style={styles.registerButtonOff}
+                onPress={() => {
                   this.register();
-                }
-              }}
-            >
-              <Text style={styles.textButton}>S’INSCRIRE</Text>
-              <IonIcon name="ios-arrow-dropright" style={styles.iconRegister} />
-            </TouchableOpacity>
-          )}
-        </View>
+                }}
+              >
+                <Text style={styles.textButton}>SE DÉINSCRIRE</Text>
+                <IonIcon name="ios-close" style={styles.iconClose} />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={styles.registerButtonOn}
+                onPress={() => {
+                  // Cas des sondages internet
+                  if (this.state.offer.typeOffer === "Sondage Internet") {
+                    return AlertIOS.prompt(
+                      "Sondage " + this.state.companyName,
+                      "Participer immédiatement ?",
+                      [
+                        {
+                          text: "Oui",
+                          onPress: () => {
+                            this.getToHistory();
+                            Linking.openURL(
+                              "https://desproges.typeform.com/to/XzYxTs"
+                            );
+                          }
+                        },
+                        {
+                          text: "Non",
+                          onPress: () => {
+                            console.log("Cancel Pressed");
+                          },
+                          style: "cancel"
+                        }
+                      ],
+                      { cancelable: false }
+                    );
+                  } else {
+                    // Cas des tests produits
+                    this.register();
+                  }
+                }}
+              >
+                {this.state.offer.typeOffer === "Sondage Internet" ? (
+                  <Text style={styles.textButton}>PARTICIPER</Text>
+                ) : (
+                  <Text style={styles.textButton}>S’INSCRIRE</Text>
+                )}
+                <IonIcon
+                  name="ios-arrow-dropright"
+                  style={styles.iconRegister}
+                />
+              </TouchableOpacity>
+            )}
+          </View>
+        ) : (
+          <View style={styles.registerContainer}>
+            <View style={styles.participationContainer}>
+              <IonIcon
+                name="ios-checkbox-outline"
+                style={styles.iconParticipation}
+              />
+              <Text style={styles.textIfParticipate}>
+                Vous avez déjà participé à ce sondage.
+              </Text>
+            </View>
+          </View>
+        )}
+        {/* REGISTER  -  REGISTER  -  REGISTER  -  REGISTER */}
       </View>
     );
   }
@@ -394,7 +458,7 @@ class Offer extends React.Component {
                 }
               );
             });
-          // Charger l'utilisateur et vérifier les favoris
+          // Vérifier les favoris
           axios
             .get("http://localhost:3000/checkfavorites/" + this.state.user_id)
             .then(response => {
@@ -415,6 +479,27 @@ class Offer extends React.Component {
                 }
               );
             });
+          // Vérifier l'historique
+          axios
+            .get("http://localhost:3000/checkhistory/" + this.state.user_id)
+            .then(response => {
+              this.setState(
+                {
+                  checkhistory: response.data
+                },
+                () => {
+                  this.state.checkhistory.indexOf(
+                    this.props.navigation.state.params.id
+                  ) === -1
+                    ? this.setState({
+                        history: false
+                      })
+                    : this.setState({
+                        history: true
+                      });
+                }
+              );
+            });
         }
       );
     });
@@ -430,8 +515,7 @@ const styles = StyleSheet.create({
   },
   ImageContainer: {
     width: "100%",
-    height: 200,
-    padding: 15
+    height: 200
   },
   Image: {
     flex: 1
@@ -464,13 +548,13 @@ const styles = StyleSheet.create({
     fontSize: 22,
     marginLeft: 15,
     marginTop: 10,
-    width: "80%"
+    width: "72%"
   },
   titleOffer: {
     marginLeft: 15,
     marginTop: 5,
     fontSize: 15,
-    color: "gray",
+    color: "#567294",
     width: "80%"
   },
   title: {
@@ -480,7 +564,9 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 22,
     fontWeight: "bold",
-    color: "#B2025A"
+    color: "#B2025A",
+    width: "20%",
+    textAlign: "right"
   },
   LogoSociété: {
     height: 45,
@@ -579,7 +665,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     position: "relative",
-    zIdex: 0,
     opacity: 1
   },
   mapCache: {
@@ -598,14 +683,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 3,
     borderColor: "#B2025A",
-    marginLeft: 15,
+    marginLeft: 2,
     marginTop: 7,
     borderWidth: 1.2,
     height: 30,
     width: 130
   },
   textMapButton: {
-    marginTop: 20,
     position: "absolute",
     color: "#B2025A"
   },
@@ -670,6 +754,21 @@ const styles = StyleSheet.create({
   mapViewContainer: {
     width: "100%",
     height: 85
+  },
+  textIfParticipate: {
+    marginTop: 10,
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "green"
+  },
+  participationContainer: {
+    flexDirection: "row"
+  },
+  iconParticipation: {
+    fontSize: 30,
+    marginTop: 4,
+    marginRight: 5,
+    color: "green"
   },
   end: {
     height: 50

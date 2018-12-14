@@ -1,4 +1,4 @@
-// OFFER LABEL
+// HISTORY LABEL
 
 // Importer React
 import React from "react";
@@ -13,7 +13,7 @@ import {
 import IonIcon from "react-native-vector-icons/Ionicons";
 
 // Créer le composant
-class OfferLabel extends React.Component {
+class HistoryLabel extends React.Component {
   state = {
     pageName: "MesOffres"
   };
@@ -22,7 +22,6 @@ class OfferLabel extends React.Component {
       <View style={styles.PrincipalContainer}>
         <TouchableOpacity
           onPress={() => {
-            // alert(this.props.id);
             this.props.navigation.navigate("AnnoncesDetails", {
               id: this.props.id,
               pageName: this.state.pageName,
@@ -33,7 +32,7 @@ class OfferLabel extends React.Component {
           <View style={styles.FirstContainer}>
             <View style={styles.LogoOfferContainer}>
               {this.props.typeOffer === "Test produits" ? (
-                <IonIcon name="ios-beaker" style={styles.iconOffer} />
+                <IonIcon name="md-outlet" style={styles.iconOffer} />
               ) : (
                 <IonIcon name="ios-phone-portrait" style={styles.iconOffer} />
               )}
@@ -44,61 +43,12 @@ class OfferLabel extends React.Component {
                   ? "Test produits"
                   : "Sondage Internet"}
               </Text>
-              <Text style={styles.OfferSubTitle}>
-                {this.props.typeOffer === "Test produits"
-                  ? "Déplacement sur site nécessaire"
-                  : "Participez immédiatement au sondage !"}
+              <Text style={styles.OfferSubTitle} numberOfLines={1}>
+                {this.props.companyName + " : " + this.props.title}
               </Text>
             </View>
             <View>
               <Text style={styles.Price}>{this.props.price} €</Text>
-            </View>
-          </View>
-          <View style={styles.SecondContainer}>
-            <View style={styles.SecondContainerLeft}>
-              {this.props.picture === "" ? (
-                this.props.logoCompany === "" ||
-                this.props.logoCompany === "d" ? (
-                  <ImageBackground
-                    style={styles.Image2}
-                    source={require("../assets/images/placeholder-image.png")}
-                  />
-                ) : (
-                  <ImageBackground
-                    style={styles.Image2}
-                    source={{
-                      uri: this.props.logoCompany
-                    }}
-                  />
-                )
-              ) : (
-                <ImageBackground
-                  style={styles.Image2}
-                  source={{
-                    uri: this.props.picture
-                  }}
-                />
-              )}
-            </View>
-            <View style={styles.SecondContainerRight}>
-              <Text style={styles.OfferFirstTitle}>
-                {this.props.companyName}
-              </Text>
-              <Text style={styles.OfferTitle} numberOfLines={1}>
-                {this.props.title}
-              </Text>
-              <View style={styles.OfferSecondTitleContainer}>
-                <IonIcon name="ios-people" style={styles.icones} />
-                <Text style={styles.OfferSecondTitle}>
-                  {this.props.availabilities} place(s) restante(s)
-                </Text>
-              </View>
-              <View style={styles.OfferSecondTitleContainer}>
-                <IonIcon name="ios-timer" style={styles.icones} />
-                <Text style={styles.OfferSecondTitle}>
-                  Durée du test : {this.props.duration}
-                </Text>
-              </View>
             </View>
           </View>
         </TouchableOpacity>
@@ -108,7 +58,7 @@ class OfferLabel extends React.Component {
 }
 
 // Exporter le composant
-export default OfferLabel;
+export default HistoryLabel;
 
 // Styles
 var styles = StyleSheet.create({
@@ -126,10 +76,7 @@ var styles = StyleSheet.create({
     shadowOpacity: 1.0
   },
   FirstContainer: {
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    borderBottomLeftRadius: 1,
-    borderBottomRightRadius: 1,
+    borderRadius: 10,
     flexDirection: "row",
     alignItems: "center",
     height: 53,
@@ -172,21 +119,22 @@ var styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#041A39",
-    width: 210
+    width: 205
   },
   OfferTitle: {
     fontSize: 12,
     fontWeight: "bold",
     color: "#567294",
     marginBottom: 3,
-    width: 180
+    width: 205
   },
   OfferSubTitle: {
     marginTop: 3,
     marginLeft: 3,
     fontSize: 11,
     fontStyle: "italic",
-    color: "#567294"
+    color: "#567294",
+    width: 205
   },
   Price: {
     width: 80,

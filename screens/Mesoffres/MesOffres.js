@@ -12,6 +12,7 @@ import {
   AsyncStorage
 } from "react-native";
 import OfferLabel from "../../components/OfferLabel";
+import HistoryLabel from "../../components/HistoryLabel";
 
 export default class MesOffres extends React.Component {
   // Barre de navigation
@@ -67,25 +68,48 @@ export default class MesOffres extends React.Component {
   // Render
   render() {
     const MyDatas = [];
-    for (let i = 0; i < this.state.Datas.length; i++) {
-      MyDatas.push(
-        <OfferLabel
-          id={this.state.Datas[i]._id}
-          title={this.state.Datas[i].offerName}
-          picture={this.state.Datas[i].picture}
-          availabilities={this.state.Datas[i].availabilities}
-          price={this.state.Datas[i].price}
-          typeOffer={this.state.Datas[i].typeOffer}
-          duration={this.state.Datas[i].duration}
-          picture={this.state.Datas[i].picture}
-          companyName={this.state.Datas[i].company.companyAccount.companyName}
-          logoCompany={
-            this.state.Datas[i].company.companyAccount.companyLogo[0]
-          }
-          navigation={this.props.navigation}
-        />
-      );
+    if (this.state.OfferType === "history") {
+      for (let i = 0; i < this.state.Datas.length; i++) {
+        MyDatas.push(
+          <HistoryLabel
+            id={this.state.Datas[i]._id}
+            title={this.state.Datas[i].offerName}
+            picture={this.state.Datas[i].picture}
+            availabilities={this.state.Datas[i].availabilities}
+            price={this.state.Datas[i].price}
+            typeOffer={this.state.Datas[i].typeOffer}
+            duration={this.state.Datas[i].duration}
+            picture={this.state.Datas[i].picture}
+            companyName={this.state.Datas[i].company.companyAccount.companyName}
+            logoCompany={
+              this.state.Datas[i].company.companyAccount.companyLogo[0]
+            }
+            navigation={this.props.navigation}
+          />
+        );
+      }
+    } else {
+      for (let i = 0; i < this.state.Datas.length; i++) {
+        MyDatas.push(
+          <OfferLabel
+            id={this.state.Datas[i]._id}
+            title={this.state.Datas[i].offerName}
+            picture={this.state.Datas[i].picture}
+            availabilities={this.state.Datas[i].availabilities}
+            price={this.state.Datas[i].price}
+            typeOffer={this.state.Datas[i].typeOffer}
+            duration={this.state.Datas[i].duration}
+            picture={this.state.Datas[i].picture}
+            companyName={this.state.Datas[i].company.companyAccount.companyName}
+            logoCompany={
+              this.state.Datas[i].company.companyAccount.companyLogo[0]
+            }
+            navigation={this.props.navigation}
+          />
+        );
+      }
     }
+
     return (
       <View>
         <View style={styles.navContainer}>
@@ -269,12 +293,7 @@ var styles = StyleSheet.create({
     height: 150
   },
   ifEmptyContainerOff: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "90%",
-    marginLeft: "5%",
-    marginTop: 5,
+    overflow: "hidden",
     height: 0
   },
   ifEmptyText: {

@@ -25,7 +25,6 @@ export default class Annonces extends React.Component {
 			fontWeight: "bold"
 		}
 	};
-
 	// constructor(props) {
 	// 	super(props);
 	// 	this.state = {
@@ -48,6 +47,7 @@ export default class Annonces extends React.Component {
 	// }
 
 	state = {
+    pageName: "Annonces",
 		userId: this.props.navigation.state.params,
 		offers: [],
 		searchParams: {
@@ -274,7 +274,6 @@ export default class Annonces extends React.Component {
 							style={pickerSelectStyles.inputIOS}
 							blurOnSubmit={false}
 						/> */}
-
 						<RNPickerSelect
 							placeholder={{
 								label: "Filtrer par...",

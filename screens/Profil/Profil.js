@@ -7,15 +7,92 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Modal
+  Button,
+  AsyncStorage
 } from "react-native";
+import { Permissions, ImagePicker } from "expo";
+
+const CLOUD_NAME = "test-it-cloudinary";
+const UPLOAD_PRESET_NAME = "yplphiqg";
 
 export default class Profil extends React.Component {
   state = {
     background: "",
     interests: "",
     bio: "",
-    button: false
+    button: false,
+    image: null,
+    firstName: "",
+    lastName: "",
+    userInformation: ""
+  };
+
+  componentDidMount() {
+    this.checkPermission(Permissions.CAMERA_ROLL);
+    AsyncStorage.getItem("userInformation", (err, result) => {
+      const userInformation = JSON.parse(result);
+      this.setState({ userInformation: userInformation.account });
+      console.log(this.state.userInformation);
+    });
+  }
+  askPermission(type) {
+    Expo.Permissions.askAsync(type);
+  }
+
+  checkPermission(type) {
+    Expo.Permissions.getAsync(type)
+      .then(result => {
+        if (result.permissions.cameraRoll.status !== "granted") {
+          this.askPermission(type);
+        } else {
+          console.log(`${type}`, result.permissions.cameraRoll.status);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: false,
+      aspect: [1, 1],
+      base64: true
+    });
+    if (!result.cancelled) {
+      let base64Img = `data:image/jpg;base64,${result.base64}`;
+
+      //Add your cloud name
+      let apiUrl = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+
+      let data = {
+        file: base64Img,
+        folder: "profile",
+        upload_preset: UPLOAD_PRESET_NAME
+      };
+
+      fetch(apiUrl, {
+        body: JSON.stringify(data),
+        headers: {
+          "content-type": "application/json"
+        },
+        method: "POST"
+      })
+        .then(async r => {
+          let data = await r.json();
+          //envoyer au back
+          this.setState({
+            image: `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/w_400,h_400,c_thumb,g_face/w_200/v${
+              data.version
+            }/${data.public_id}.jpg`
+          });
+        })
+        .catch(err => console.log(err));
+    }
+  };
+
+  deleteImage = () => {
+    this.setState({ image: null });
   };
 
   render() {
@@ -58,20 +135,65 @@ export default class Profil extends React.Component {
                 top: -66
               }}
             >
-              <TouchableOpacity onPress={this._pickImage}>
-                <Image
-                  style={[
-                    {
-                      width: 132,
-                      height: 132,
-                      borderRadius: 66,
-                      position: "absolute",
-                      zIndex: 1
-                    },
-                    styles.ProfilePictureStyle
-                  ]}
-                  source={require("../../assets/images/profile.jpeg")}
-                />
+              <TouchableOpacity onPress={this.pickImage}>
+                <View>
+                  {this.state.image ? (
+                    <Image
+                      style={[
+                        {
+                          width: 132,
+                          height: 132,
+                          borderRadius: 66,
+                          position: "absolute",
+                          zIndex: 1
+                        },
+                        styles.ProfilePictureStyle
+                      ]}
+                      source={{ uri: this.state.image }}
+                    />
+                  ) : (
+                    <Text />
+                  )}
+                  {this.state.image ? (
+                    <Button
+                      onPress={this.deleteImage}
+                      title="Supprimer l'image"
+                    />
+                  ) : (
+                    // <Button
+                    //   onPress={this.pickImage}
+                    //   title="Choisir une image"
+                    // />
+                    <View
+                      style={{
+                        height: 132,
+                        width: 132,
+                        position: "absolute",
+                        overflow: "hidden",
+                        top: 0
+                      }}
+                    >
+                      <View
+                        style={{
+                          width: 132,
+                          height: 132,
+                          backgroundColor: "grey",
+                          borderRadius: 66,
+                          justifyContent: "center",
+                          alignItems: "center"
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 10
+                          }}
+                        >
+                          Choisir une image
+                        </Text>
+                      </View>
+                    </View>
+                  )}
+                </View>
               </TouchableOpacity>
             </View>
           </View>
@@ -84,7 +206,8 @@ export default class Profil extends React.Component {
                 marginBottom: 3
               }}
             >
-              Julie Chabannon
+              {this.state.userInformation.firstName}{" "}
+              {this.state.userInformation.lastName}
             </Text>
             <Text
               style={{
@@ -221,7 +344,6 @@ export default class Profil extends React.Component {
           <View>
             <TouchableOpacity
               onPress={() => {
-                console.log("cool");
                 this.setState({ button: false });
                 console.log(this.state.button);
               }}
@@ -379,5 +501,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#D0CDCD",
     opacity: 0.5,
     top: -500
+  },
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center"
   }
 });

@@ -5,6 +5,7 @@ import axios from "axios";
 import moment from "moment";
 import { Share } from "react-native";
 import { BackHandler } from "react-native";
+import { LinearGradient } from "expo";
 import {
   Image,
   ImageBackground,
@@ -26,6 +27,7 @@ class Offer extends React.Component {
     register: false,
     favorites: false,
     companyName: "",
+    logoCompany: "",
     adresse: "",
     postalCode: "",
     city: "",
@@ -95,11 +97,18 @@ class Offer extends React.Component {
         <View style={styles.BoutonContainer}>
           <TouchableOpacity
             onPress={() => {
-              // this.handleBackPress();
-              this.props.navigation.navigate("Annonces", {
-                id: this.props.id,
-                navigation: this.props.navigation
-              });
+              this.props.navigation.state.params.pageName === undefined
+                ? this.props.navigation.navigate("AnnoncesDetails", {
+                    id: this.props.id,
+                    navigation: this.props.navigation
+                  })
+                : this.props.navigation.navigate(
+                    this.props.navigation.state.params.pageName.toString(),
+                    {
+                      id: this.props.id,
+                      navigation: this.props.navigation
+                    }
+                  );
             }}
           >
             <IonIcon
@@ -122,15 +131,24 @@ class Offer extends React.Component {
         <ScrollView style={styles.scrollviewContainer}>
           <View style={styles.ImageContainer}>
             {this.state.offer.picture === "" ? (
-              <ImageBackground
-                style={styles.Image}
-                source={require("../../assets/images/placeholder-image.png")}
-              />
+              this.state.logoCompany === "" ? (
+                <ImageBackground
+                  style={styles.Image}
+                  source={require("../../assets/images/placeholder-image.png")}
+                />
+              ) : (
+                <ImageBackground
+                  style={styles.Image}
+                  source={{
+                    uri: this.state.logoCompany
+                  }}
+                />
+              )
             ) : (
               <ImageBackground
                 style={styles.Image}
                 source={{
-                  uri: this.state.offer.picture
+                  uri: this.state.picture
                 }}
               />
             )}
@@ -155,13 +173,17 @@ class Offer extends React.Component {
                 )}
               </Text>
             </View>
-            <View style={styles.ArrayContainerN1}>
-              <IonIcon name="ios-walk" style={styles.icones} />
-              <Text style={styles.OfferSecondTitle}>
-                {/* Type : {this.state.offer.typeOffer} */}
-                Type : test produits
-              </Text>
-            </View>
+            {this.state.latitude === "" ? (
+              <View style={styles.ArrayContainerN1}>
+                <IonIcon name="ios-phone-portrait" style={styles.icones} />
+                <Text style={styles.OfferSecondTitle}>Sondage Internet</Text>
+              </View>
+            ) : (
+              <View style={styles.ArrayContainerN1}>
+                <IonIcon name="ios-beaker" style={styles.icones} />
+                <Text style={styles.OfferSecondTitle}>Test produits</Text>
+              </View>
+            )}
           </View>
           <View style={styles.ArrayContainer}>
             <View style={styles.ArrayContainerN1}>
@@ -189,47 +211,58 @@ class Offer extends React.Component {
           {/* Ligne de séparation */}
           <View style={styles.separationLine} />
           {/* =================== */}
-          <View style={styles.localisationON}>
-            <Text style={styles.subTitle}>Localisation</Text>
-            <MapView
-              style={styles.MapView}
-              initialRegion={{
-                latitude: 48.8714, //this.state.latitude,
-                longitude: 2.30247, //this.state.longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421
-              }}
-            >
-              <MapView.Marker
-                coordinate={{
-                  latitude: 48.8714, //this.state.latitude,
-                  longitude: 2.30247 //this.state.longitude,
-                }}
-              />
-            </MapView>
-            <View style={styles.mapCache}>
-              <Text style={styles.textMap}>
-                {this.state.city} {this.state.postalCode}
-              </Text>
-              <TouchableOpacity
-                style={styles.mapButton}
-                onPress={() => {
-                  this.props.navigation.navigate("GPS", {
-                    id: this.state.offer._id,
-                    navigation: this.props.navigation,
-                    latitude: this.state.latitude,
-                    longitude: this.state.longitude,
-                    adresse: this.state.adresse,
-                    postalCode: this.state.postalCode,
-                    city: this.state.city,
-                    country: this.state.country
-                  });
+          {this.state.latitude === "" ? (
+            // SI PAS DE LATITUDE NE PAS AFFICHER LA MAP
+            <View />
+          ) : (
+            <View style={styles.mapViewContainer}>
+              <MapView
+                style={styles.MapView}
+                region={{
+                  latitude: this.state.latitude,
+                  longitude: this.state.longitude,
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421
                 }}
               >
-                <Text style={styles.textMapButton}>Voir sur la carte</Text>
-              </TouchableOpacity>
+                <MapView.Marker
+                  coordinate={{
+                    latitude: this.state.latitude,
+                    longitude: this.state.longitude
+                  }}
+                />
+                <LinearGradient
+                  colors={["rgba(255,255,255,0.1)", "white"]}
+                  start={[1, 0]}
+                  end={[0, 1]}
+                  style={styles.linearGradient}
+                />
+                <View style={styles.mapCache}>
+                  <Text style={styles.textMap}>
+                    {this.state.city} {this.state.postalCode}
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.mapButton}
+                    onPress={() => {
+                      this.props.navigation.navigate("GPS", {
+                        id: this.state.offer._id,
+                        pageName: this.props.navigation.state.params.pageName.toString(),
+                        navigation: this.props.navigation,
+                        latitude: this.state.latitude,
+                        longitude: this.state.longitude,
+                        adresse: this.state.adresse,
+                        postalCode: this.state.postalCode,
+                        city: this.state.city,
+                        country: this.state.country
+                      });
+                    }}
+                  >
+                    <Text style={styles.textMapButton}>Voir sur la carte</Text>
+                  </TouchableOpacity>
+                </View>
+              </MapView>
             </View>
-          </View>
+          )}
           <View style={styles.shareContainer}>
             <TouchableOpacity
               style={styles.shareFacebookContainer}
@@ -276,7 +309,27 @@ class Offer extends React.Component {
             <TouchableOpacity
               style={styles.registerButtonOn}
               onPress={() => {
-                this.register();
+                // Cas des sondages internet
+                if (this.state.offer.typeOffer === "Sondage Internet") {
+                  return AlertIOS.alert(
+                    this.state.companyName,
+                    "Participer immédiatement au sondage ?",
+                    [
+                      { text: "Oui", onPress: () => console.log("OK Pressed") },
+                      {
+                        text: "Non",
+                        onPress: () => {
+                          console.log("Cancel Pressed");
+                        },
+                        style: "cancel"
+                      }
+                    ],
+                    { cancelable: false }
+                  );
+                } else {
+                  // Cas des tests produits
+                  this.register();
+                }
               }}
             >
               <Text style={styles.textButton}>S’INSCRIRE</Text>
@@ -317,16 +370,27 @@ class Offer extends React.Component {
                     : this.setState({
                         register: true
                       });
-                  this.setState({
-                    companyName: this.state.offer.company.companyAccount
-                      .companyName,
-                    adresse: this.state.offer.adress[0].streetName,
-                    postalCode: this.state.offer.adress[0].zipcode,
-                    city: this.state.offer.adress[0].city,
-                    country: this.state.offer.adress[0].country,
-                    latitude: this.state.offer.adress[0].latitude,
-                    longitude: this.state.offer.adress[0].longitude
-                  });
+                  if (this.state.offer.adress.length === 0) {
+                    this.setState({
+                      companyName: this.state.offer.company.companyAccount
+                        .companyName,
+                      logoCompany: this.state.offer.company.companyAccount
+                        .companyLogo
+                    });
+                  } else {
+                    this.setState({
+                      companyName: this.state.offer.company.companyAccount
+                        .companyName,
+                      logoCompany: this.state.offer.company.companyAccount
+                        .companyLogo,
+                      adresse: this.state.offer.adress[0].streetName,
+                      postalCode: this.state.offer.adress[0].zipcode,
+                      city: this.state.offer.adress[0].city,
+                      country: this.state.offer.adress[0].country,
+                      latitude: this.state.offer.adress[0].latitude,
+                      longitude: this.state.offer.adress[0].longitude
+                    });
+                  }
                 }
               );
             });
@@ -366,7 +430,8 @@ const styles = StyleSheet.create({
   },
   ImageContainer: {
     width: "100%",
-    height: 200
+    height: 200,
+    padding: 15
   },
   Image: {
     flex: 1
@@ -451,7 +516,7 @@ const styles = StyleSheet.create({
   ArrayContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "start",
+    alignItems: "flex-start",
     marginLeft: "auto",
     marginRight: "auto",
     marginLeft: 15
@@ -471,7 +536,7 @@ const styles = StyleSheet.create({
     fontSize: 13
   },
   registerContainer: {
-    justifyContent: "start",
+    justifyContent: "flex-start",
     alignItems: "center",
     paddingTop: 15,
     height: 200,
@@ -484,7 +549,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: 180,
     height: 40,
-    borderRadius: "50%",
+    borderRadius: 50,
     backgroundColor: "#B2025A",
     shadowOffset: { width: 1, height: 1 },
     shadowColor: "lightgray",
@@ -496,7 +561,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: 180,
     height: 40,
-    borderRadius: "50%",
+    borderRadius: 50,
     backgroundColor: "#567294",
     shadowOffset: { width: 1, height: 1 },
     shadowColor: "lightgray",
@@ -514,24 +579,24 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     position: "relative",
-    opacity: 0.3
+    zIdex: 0,
+    opacity: 1
   },
   mapCache: {
     flex: 1,
     height: 90,
     width: "100%",
-    marginTop: 40,
     padding: 15,
     position: "absolute"
   },
   textMap: {
     fontSize: 17,
-    color: "#444444"
+    color: "#111111"
   },
   mapButton: {
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: "3%",
+    borderRadius: 3,
     borderColor: "#B2025A",
     marginleft: 15,
     marginTop: 7,
@@ -540,6 +605,8 @@ const styles = StyleSheet.create({
     width: 130
   },
   textMapButton: {
+    marginTop: 20,
+    position: "absolute",
     color: "#B2025A"
   },
   shareContainer: {
@@ -591,6 +658,18 @@ const styles = StyleSheet.create({
     marginRight: 2.5,
     marginTop: 3,
     color: "#567294"
+  },
+  linearGradient: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    height: 100,
+    width: "70%"
+  },
+  mapViewContainer: {
+    width: "100%",
+    height: 85
   },
   end: {
     height: 50

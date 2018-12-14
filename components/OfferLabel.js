@@ -14,33 +14,39 @@ import IonIcon from "react-native-vector-icons/Ionicons";
 
 // Créer le composant
 class OfferLabel extends React.Component {
+  state = {
+    pageName: "MesOffres"
+  };
   render() {
     return (
       <View style={styles.PrincipalContainer}>
         <TouchableOpacity
           onPress={() => {
+            // alert(this.props.id);
             this.props.navigation.navigate("AnnoncesDetails", {
               id: this.props.id,
+              pageName: this.state.pageName,
               navigation: this.props.navigation
             });
           }}
         >
           <View style={styles.FirstContainer}>
-            <View style={styles.LogoCompany}>
-              <Image
-                style={styles.Image1}
-                source={require("../assets/images/Test_produits.png")}
-              />
+            <View style={styles.LogoOfferContainer}>
+              {this.props.typeOffer === "Test produits" ? (
+                <IonIcon name="ios-beaker" style={styles.iconOffer} />
+              ) : (
+                <IonIcon name="ios-phone-portrait" style={styles.iconOffer} />
+              )}
             </View>
             <View>
               <Text style={styles.NameCompany}>
-                {
-                  (this.props.typeOffer = "Physique"
-                    ? "Test produits"
-                    : "Sondage internet")
-                }
+                {this.props.typeOffer === "Test produits"
+                  ? "Test produits"
+                  : "Sondage Internet"}
               </Text>
-              <Text style={styles.DescriptionCompany}>{this.props.title}</Text>
+              <Text style={styles.OfferSubTitle}>
+                Participez immédiatement au sondage !
+              </Text>
             </View>
             <View>
               <Text style={styles.Price}>{this.props.price} €</Text>
@@ -49,25 +55,34 @@ class OfferLabel extends React.Component {
           <View style={styles.SecondContainer}>
             <View style={styles.SecondContainerLeft}>
               {this.props.picture === "" ? (
-                <Image
-                  style={styles.Image2}
-                  source={require("../assets/images/placeholder-image.png")}
-                />
+                this.props.logoCompany === "" ||
+                this.props.logoCompany === "d" ? (
+                  <ImageBackground
+                    style={styles.Image2}
+                    source={require("../assets/images/placeholder-image.png")}
+                  />
+                ) : (
+                  <ImageBackground
+                    style={styles.Image2}
+                    source={{
+                      uri: this.props.logoCompany
+                    }}
+                  />
+                )
               ) : (
-                <Image
+                <ImageBackground
                   style={styles.Image2}
                   source={{
                     uri: this.props.picture
                   }}
                 />
               )}
-              <Text>{this.props.picture}</Text>
             </View>
             <View style={styles.SecondContainerRight}>
-              <Text>{this.props.picture}</Text>
               <Text style={styles.OfferFirstTitle}>
                 {this.props.companyName}
               </Text>
+              <Text style={styles.OfferTitle}>{this.props.title}</Text>
               <View style={styles.OfferSecondTitleContainer}>
                 <IonIcon name="ios-people" style={styles.icones} />
                 <Text style={styles.OfferSecondTitle}>
@@ -114,7 +129,7 @@ var styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     height: 53,
-    border: "solid",
+    borderWidth: 0.5,
     borderColor: "gray",
     borderWidth: 0.5,
     borderColor: "#CCCCCC",
@@ -133,20 +148,20 @@ var styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: 118,
-    paddingTop: 12
+    padding: 5
   },
-  LogoCompany: {
+  LogoOfferContainer: {
     justifyContent: "center",
     alignItems: "center",
     width: 55
   },
-  Image1: {
-    width: 40,
-    height: 40
+  iconOffer: {
+    fontSize: 40,
+    color: "#567294"
   },
   Image2: {
     width: 95,
-    height: 100,
+    height: 90,
     resizeMode: "cover"
   },
   NameCompany: {
@@ -156,7 +171,14 @@ var styles = StyleSheet.create({
     color: "#041A39",
     width: 230
   },
-  DescriptionCompany: {
+  OfferTitle: {
+    fontSize: 10,
+    fontStyle: "italic",
+    color: "#567294",
+    marginBottom: 3
+  },
+  OfferSubTitle: {
+    marginTop: 3,
     marginLeft: 3,
     fontSize: 10,
     fontStyle: "italic",
@@ -171,7 +193,8 @@ var styles = StyleSheet.create({
   },
   OfferFirstTitle: {
     fontSize: 18,
-    marginBottom: 10,
+    marginTop: 10,
+    marginBottom: 1,
     fontWeight: "bold",
     color: "#041A39"
   },

@@ -19,7 +19,7 @@ class GPS extends React.Component {
         <View style={styles.mapViewContainer}>
           <MapView
             style={styles.MapView}
-            initialRegion={{
+            region={{
               latitude: this.props.navigation.state.params.latitude,
               longitude: this.props.navigation.state.params.longitude,
               latitudeDelta: 0.0922,
@@ -38,6 +38,7 @@ class GPS extends React.Component {
             onPress={() => {
               this.props.navigation.navigate("AnnoncesDetails", {
                 id: this.props.navigation.state.params.id,
+                pageName: this.props.navigation.state.params.pageName,
                 navigation: this.props.navigation
               });
             }}

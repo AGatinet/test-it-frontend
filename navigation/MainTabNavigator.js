@@ -14,6 +14,7 @@ import ReglagesScreen from "../screens/Reglages/Reglages";
 import BankAccountScreen from "../screens/Reglages/Bank";
 import ContactUsScreen from "../screens/Reglages/Contact";
 import IbanFormScreen from "../screens/Reglages/IbanForm";
+import TypeForm from "../screens/Annonces/TypeForm";
 
 const Annonces = createStackNavigator({
   Annonces: {
@@ -33,6 +34,15 @@ const Annonces = createStackNavigator({
 
 Annonces.navigationOptions = {
   tabBarLabel: "Annonces",
+  tabBarOptions: {
+    activeTintColor: "#041A39",
+    inactiveTintColor: "#ACB9CC"
+  },
+  tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name={"home"} />
+};
+
+TypeForm.navigationOptions = {
+  tabBarLabel: "Sondage",
   tabBarOptions: {
     activeTintColor: "#041A39",
     inactiveTintColor: "#ACB9CC"

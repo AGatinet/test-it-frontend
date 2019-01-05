@@ -17,7 +17,8 @@ import {
   FlatList,
   AlertIOS,
   AsyncStorage,
-  Linking
+  Linking,
+  WebView
 } from "react-native";
 
 class Offer extends React.Component {
@@ -78,33 +79,6 @@ class Offer extends React.Component {
       favorites: !this.state.favorites
     });
   };
-  getToHistory = () => {
-    axios
-      .post("http://localhost:3000/participation", {
-        Offer_id: this.props.navigation.state.params.id,
-        User_id: this.state.user_id
-      })
-      .then(response => {
-        console.log("", response.data);
-      })
-      .catch(e => {
-        console.error("error", e);
-      });
-    this.setState(
-      {
-        participation: true
-      },
-      () => {
-        this.props.navigation.navigate(
-          this.props.navigation.state.params.pageName.toString(),
-          {
-            id: this.props.id,
-            navigation: this.props.navigation
-          }
-        );
-      }
-    );
-  };
   share = () => {
     Share.share(
       {
@@ -123,6 +97,7 @@ class Offer extends React.Component {
   };
 
   render() {
+    console.log(this.state.offer);
     return (
       <View>
         <View style={styles.BoutonContainer}>
@@ -206,10 +181,10 @@ class Offer extends React.Component {
                 {moment(this.state.offer.deadlineTest).format("DD-MM-YYYY")}
               </Text>
             </View>
-            {this.state.latitude === "" ? (
+            {this.state.offer.typeOffer === "Sondage" ? (
               <View style={styles.ArrayContainerN1}>
                 <IonIcon name="ios-phone-portrait" style={styles.icones} />
-                <Text style={styles.OfferSecondTitle}>Sondage Internet</Text>
+                <Text style={styles.OfferSecondTitle}>Sondage</Text>
               </View>
             ) : (
               <View style={styles.ArrayContainerN1}>
@@ -244,7 +219,7 @@ class Offer extends React.Component {
           {/* Ligne de séparation */}
           <View style={styles.separationLine} />
           {/* =================== */}
-          {this.state.latitude === "" ? (
+          {this.state.offer.typeOffer === "Sondage" ? (
             // SI PAS DE LATITUDE NE PAS AFFICHER LA MAP
             <View />
           ) : (
@@ -337,7 +312,7 @@ class Offer extends React.Component {
                   this.register();
                 }}
               >
-                <Text style={styles.textButton}>SE DÉINSCRIRE</Text>
+                <Text style={styles.textButton}>SE DÉSINSCRIRE</Text>
                 <IonIcon name="ios-close" style={styles.iconClose} />
               </TouchableOpacity>
             ) : (
@@ -345,7 +320,7 @@ class Offer extends React.Component {
                 style={styles.registerButtonOn}
                 onPress={() => {
                   // Cas des sondages internet
-                  if (this.state.offer.typeOffer === "Sondage Internet") {
+                  if (this.state.offer.typeOffer === "Sondage") {
                     return AlertIOS.prompt(
                       "Sondage " + this.state.companyName,
                       "Participer immédiatement ?",
@@ -353,18 +328,22 @@ class Offer extends React.Component {
                         {
                           text: "Oui",
                           onPress: () => {
-                            this.getToHistory();
-                            Linking.openURL(
-                              "https://desproges.typeform.com/to/XzYxTs"
-                            );
+                            // this.getToHistory();
+                            this.props.navigation.navigate("TypeForm", {
+                              id: this.state.offer._id,
+                              user_id: this.state.user_id,
+                              companyName: this.state.companyName,
+                              pageName: this.props.navigation.state.params.pageName.toString(),
+                              navigation: this.props.navigation,
+                              typeForm: this.state.offer.typeForm
+                            });
                           }
                         },
                         {
                           text: "Non",
                           onPress: () => {
                             console.log("Cancel Pressed");
-                          },
-                          style: "cancel"
+                          }
                         }
                       ],
                       { cancelable: false }
@@ -375,7 +354,7 @@ class Offer extends React.Component {
                   }
                 }}
               >
-                {this.state.offer.typeOffer === "Sondage Internet" ? (
+                {this.state.offer.typeOffer === "Sondage" ? (
                   <Text style={styles.textButton}>PARTICIPER</Text>
                 ) : (
                   <Text style={styles.textButton}>S’INSCRIRE</Text>
@@ -395,17 +374,15 @@ class Offer extends React.Component {
                 style={styles.iconParticipation}
               />
               <Text style={styles.textIfParticipate}>
-                Vous avez déjà participé à ce sondage.
+                Participation enregistrée.
               </Text>
             </View>
           </View>
         )}
-        {/* REGISTER  -  REGISTER  -  REGISTER  -  REGISTER */}
       </View>
     );
   }
   componentDidMount() {
-    BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
     // Récupérer l'id de l'utilisateur
     AsyncStorage.getItem("userInformation").then(value => {
       const userInformation = JSON.parse(value);
@@ -515,7 +492,7 @@ const styles = StyleSheet.create({
   },
   ImageContainer: {
     width: "100%",
-    height: 200
+    height: 250
   },
   Image: {
     flex: 1
@@ -526,9 +503,9 @@ const styles = StyleSheet.create({
   },
   BoutonContainer: {
     backgroundColor: "#EFEFF4",
-    marginTop: 40,
+    paddingTop: 33,
     flexDirection: "row",
-    height: 50,
+    height: 90,
     alignItems: "center",
     justifyContent: "space-between"
   },
@@ -555,7 +532,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontSize: 15,
     color: "#567294",
-    width: "80%"
+    width: "90%"
   },
   title: {
     flexDirection: "row"
@@ -683,15 +660,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 3,
     borderColor: "#B2025A",
-    marginLeft: 2,
-    marginTop: 7,
+    marginLeft: 15,
+    marginTop: 40,
     borderWidth: 1.2,
     height: 30,
-    width: 130
+    width: 130,
+    position: "absolute"
   },
   textMapButton: {
     position: "absolute",
-    color: "#B2025A"
+    color: "#B2025A",
+    marginTop: 40
   },
   shareContainer: {
     flexDirection: "row",
@@ -769,6 +748,10 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginRight: 5,
     color: "green"
+  },
+  WebView: {
+    height: 200,
+    width: "100%"
   },
   end: {
     height: 50

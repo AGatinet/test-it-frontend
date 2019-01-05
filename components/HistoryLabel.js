@@ -41,10 +41,16 @@ class HistoryLabel extends React.Component {
               <Text style={styles.NameCompany}>
                 {this.props.typeOffer === "Test produits"
                   ? "Test produits"
-                  : "Sondage Internet"}
+                  : "Sondage"}
               </Text>
               <Text style={styles.OfferSubTitle} numberOfLines={1}>
                 {this.props.companyName + " : " + this.props.title}
+              </Text>
+              <Text style={styles.OfferSubTitle} numberOfLines={1}>
+                Date de participation : 14/12/2018
+              </Text>
+              <Text style={styles.OfferSubTitle} numberOfLines={1}>
+                Statut : En cours de validation
               </Text>
             </View>
             <View>
@@ -79,7 +85,7 @@ var styles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: "row",
     alignItems: "center",
-    height: 53,
+    height: 85,
     borderColor: "gray",
     borderWidth: 0.5,
     borderColor: "#CCCCCC",
@@ -88,7 +94,6 @@ var styles = StyleSheet.create({
   SecondContainer: {
     flexDirection: "row",
     height: 120,
-    borderTopWidth: 0,
     borderWidth: 0.5,
     borderColor: "#d6d7da",
     borderBottomLeftRadius: 10,
@@ -106,7 +111,7 @@ var styles = StyleSheet.create({
     width: 55
   },
   iconOffer: {
-    fontSize: 40,
+    fontSize: 60,
     color: "#567294"
   },
   Image2: {
@@ -134,14 +139,14 @@ var styles = StyleSheet.create({
     fontSize: 11,
     fontStyle: "italic",
     color: "#567294",
-    width: 205
+    width: 215
   },
   Price: {
     width: 80,
     fontWeight: "bold",
     textAlign: "center",
-    fontSize: 25,
-    color: "#B2025A"
+    fontSize: 18,
+    color: "#567294"
   },
   OfferFirstTitle: {
     fontSize: 18,

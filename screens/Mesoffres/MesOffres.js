@@ -32,7 +32,8 @@ export default class MesOffres extends React.Component {
     user_id: "",
     IsEmpty: true,
     OfferType: "favorites",
-    Datas: ""
+    Datas: "",
+    gains: ""
   };
   // Requêtes axios
   getDatas = () => {
@@ -58,6 +59,37 @@ export default class MesOffres extends React.Component {
                 IsEmpty: false
               });
             }
+          }
+        );
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  };
+  getHistory = () => {
+    axios
+      .get(
+        "http://localhost:3000/" +
+          this.state.OfferType +
+          "/" +
+          this.state.user_id
+      )
+      .then(response => {
+        this.setState(
+          {
+            Datas: response.data
+          },
+          () => {
+            this.setState({
+              IsEmpty: false
+            });
+            let gains = 0;
+            for (let i = 0; i < this.state.Datas.length; i++) {
+              gains += this.state.Datas[i].price;
+            }
+            this.setState({
+              gains: gains
+            });
           }
         );
       })
@@ -167,7 +199,7 @@ export default class MesOffres extends React.Component {
                     OfferType: "history"
                   },
                   () => {
-                    this.getDatas();
+                    this.getHistory();
                   }
                 );
               }}
@@ -204,8 +236,55 @@ export default class MesOffres extends React.Component {
             </TouchableOpacity>
           </View>
         </View>
+        {this.state.OfferType === "history" ? (
+          // GAINS GAINS GAINS GAINS GAINS GAINS GAINS GAINS GAINS
+          <View style={styles.gainContainer}>
+            <View style={styles.gainContainerHaut}>
+              <View style={styles.gainContainerHautGauche}>
+                <Text style={styles.solde}>Solde de votre compte</Text>
+              </View>
+              <View style={styles.gainContainerHautRight}>
+                <Text style={styles.totalGain}>{this.state.gains} €</Text>
+              </View>
+            </View>
+            <Text style={styles.soldeSubTitle}>
+              Des 20€ de gains validés, vous pouvez demander un paiement.
+            </Text>
+            <View style={styles.gainContainerBas}>
+              <View style={styles.gainContainerBasGauche}>
+                <Text style={styles.detailGain1}>Détail de vos gains :</Text>
+                <View style={styles.ArrayLabel}>
+                  <IonIcon name="ios-checkmark-circle" style={styles.icon1} />
+                  <Text style={styles.gainsN2}>Gains validés</Text>
+                  <Text style={styles.gainsN3}>0 €</Text>
+                </View>
+                <View style={styles.ArrayLabel}>
+                  <IonIcon name="ios-alarm" style={styles.icon2} />
+                  <Text style={styles.gainsN2}>Gains en attente</Text>
+                  <Text style={styles.gainsN3}>{this.state.gains} €</Text>
+                </View>
+              </View>
+              <View style={styles.gainContainerBasDroit}>
+                <Text style={styles.detailGain3}>
+                  Cumul vos gains depuis le 12/12/2018
+                </Text>
+                <Text style={styles.gainsN4}>{this.state.gains} €</Text>
+              </View>
+            </View>
+            <TouchableOpacity style={styles.bouttonPaiement}>
+              <Text style={styles.bouttonPaiementText}>
+                Demander le paiement
+              </Text>
+            </TouchableOpacity>
+            <Text style={styles.gainsN5}>Détail de mes participations</Text>
+          </View>
+        ) : (
+          // GAINS GAINS GAINS GAINS GAINS GAINS GAINS GAINS GAINS
+          <View />
+        )}
         <ScrollView style={styles.background}>
           <View>{MyDatas}</View>
+          <View style={styles.end} />
         </ScrollView>
       </View>
     );
@@ -325,5 +404,156 @@ var styles = StyleSheet.create({
     fontSize: 30,
     marginLeft: 5,
     marginTop: 3
+  },
+  gainContainer: {
+    flexDirection: "column",
+    width: "100%",
+    paddingTop: 15,
+    paddingLeft: 15,
+    marginBottom: 5
+  },
+  gainContainerHaut: {
+    flexDirection: "row"
+  },
+  gainContainerBas: {
+    flexDirection: "row"
+  },
+  gainContainerHautGauche: {
+    flexDirection: "column"
+  },
+  gainContainerHautRight: {
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  solde: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#041A39",
+    paddingBottom: 7
+  },
+  soldeSubTitle: {
+    fontSize: 11.5,
+    color: "#041A39"
+  },
+  totalGain: {
+    fontSize: 25,
+    color: "#B2025A",
+    fontWeight: "bold",
+    marginLeft: 78,
+    textAlign: "right"
+  },
+  gainContainerBasGauche: {
+    flexDirection: "column",
+    width: 180,
+    marginTop: 5
+  },
+  gainContainerBasDroit: {
+    flexDirection: "column",
+    width: 150,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 5,
+    marginLeft: 15,
+    padding: 5
+  },
+  detailGain1: {
+    marginTop: 5,
+    marginBottom: 2.5,
+    color: "#041A39",
+    fontWeight: "bold"
+  },
+  detailGain2: {
+    marginTop: 5,
+    marginBottom: 5,
+    marginLeft: 5,
+    color: "#041A39"
+  },
+  detailGain3: { textAlign: "center", color: "#041A39" },
+  detailGain4: {
+    textAlign: "center",
+    color: "#041A39"
+  },
+  ArrayLabel: {
+    flexDirection: "row",
+    marginTop: 5,
+    height: 30,
+    width: 190,
+    backgroundColor: "#FBFBFB",
+    borderWidth: 0.5,
+    borderColor: "#d6d7da",
+    borderRadius: 10,
+    borderColor: "#CCCCCC",
+    shadowOffset: { width: 5, height: 5 },
+    shadowColor: "gray",
+    shadowOpacity: 1.0
+  },
+  icon1: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginTop: 3,
+    marginLeft: 8,
+    marginRight: 7,
+    height: 40,
+    width: 20,
+    textAlign: "center",
+    color: "green"
+  },
+  icon2: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginTop: 2,
+    marginLeft: 8,
+    marginRight: 7,
+    height: 40,
+    width: 20,
+    textAlign: "center",
+    color: "orange"
+  },
+  gainsN2: {
+    fontSize: 13,
+    color: "#041A39",
+    marginTop: 6,
+    width: 100
+  },
+  gainsN3: {
+    fontSize: 13,
+    color: "#041A39",
+    marginTop: 6,
+    marginRight: 5,
+    width: 45,
+    textAlign: "right"
+  },
+  gainsN4: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#041A39",
+    marginTop: 6,
+    width: 45,
+    textAlign: "center"
+  },
+  gainsN5: {
+    fontSize: 17,
+    fontWeight: "bold",
+    color: "#B2025A",
+    paddingTop: 25
+  },
+  bouttonPaiement: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: "95%",
+    height: 45,
+    borderRadius: 10,
+    backgroundColor: "#B2025A",
+    marginTop: 15
+  },
+  bouttonPaiementText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "white"
+  },
+  end: {
+    width: "100%",
+    height: 60
   }
 });

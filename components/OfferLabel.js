@@ -42,7 +42,7 @@ class OfferLabel extends React.Component {
               <Text style={styles.NameCompany}>
                 {this.props.typeOffer === "Test produits"
                   ? "Test produits"
-                  : "Sondage Internet"}
+                  : "Sondage"}
               </Text>
               <Text style={styles.OfferSubTitle}>
                 {this.props.typeOffer === "Test produits"
@@ -179,7 +179,7 @@ var styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#567294",
     marginBottom: 3,
-    width: 180
+    width: 200
   },
   OfferSubTitle: {
     marginTop: 3,

@@ -16,6 +16,23 @@ class GPS extends React.Component {
   render() {
     return (
       <View>
+        <View style={styles.BoutonContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.navigate("AnnoncesDetails", {
+                id: this.props.navigation.state.params.id,
+                pageName: this.props.navigation.state.params.pageName,
+                navigation: this.props.navigation
+              });
+            }}
+          >
+            <IonIcon
+              name="ios-close-circle-outline"
+              style={styles.iconCloseOn}
+            />
+          </TouchableOpacity>
+          <Text style={styles.title}>Localisation</Text>
+        </View>
         <View style={styles.mapViewContainer}>
           <MapView
             style={styles.MapView}
@@ -33,18 +50,6 @@ class GPS extends React.Component {
               }}
             />
           </MapView>
-          <TouchableOpacity
-            style={styles.closeButtonContainer}
-            onPress={() => {
-              this.props.navigation.navigate("AnnoncesDetails", {
-                id: this.props.navigation.state.params.id,
-                pageName: this.props.navigation.state.params.pageName,
-                navigation: this.props.navigation
-              });
-            }}
-          >
-            <IonIcon name="ios-close-circle" style={styles.closeButton} />
-          </TouchableOpacity>
           <View style={styles.adresseContainer}>
             <Text style={styles.adresseTitle}>Adresse :</Text>
             <Text style={styles.adresseN1}>
@@ -67,8 +72,27 @@ export default GPS;
 
 // Styles
 const styles = StyleSheet.create({
+  BoutonContainer: {
+    backgroundColor: "#EFEFF4",
+    paddingTop: 33,
+    flexDirection: "row",
+    height: 90,
+    alignItems: "center"
+  },
+  iconCloseOn: {
+    color: "#B2025A",
+    fontSize: 40,
+    margin: 5,
+    marginLeft: 20
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#B2025A",
+    marginLeft: 77
+  },
   mapViewContainer: {
-    height: "100%",
+    height: "87%",
     width: "100%"
   },
   MapView: {
